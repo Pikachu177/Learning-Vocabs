@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocab Study — Units 2–14</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F7F4EF;--surface:#FFFFFF;--surface2:#F0EDE6;--text:#1A1714;--text2:#6B6560;--text3:#A09A94;--accent:#C4673A;--accent-light:#F5E6DC;--green:#3B7A4A;--green-light:#E3F0E6;--red:#B84040;--red-light:#F5E3E3;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);--radius:14px;--radius-sm:8px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6}
+.shell{max-width:820px;margin:0 auto;padding:2rem 1.25rem 4rem}
+header{text-align:center;padding:2.5rem 0 2rem}
+header h1{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;letter-spacing:-.02em}
+header p{color:var(--text2);font-size:13px;margin-top:.4rem}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin:0 8px;vertical-align:middle}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:var(--surface2);border-radius:var(--radius);padding:5px;margin-bottom:1.5rem}
+.tab{padding:9px 6px;font-size:13px;font-weight:500;border:none;background:none;color:var(--text2);border-radius:var(--radius-sm);cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif}
+.tab:hover{color:var(--text)}
+.tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,0.1)}
+.panel{display:none}.panel.active{display:block}
+
+/* filter row */
+.filter-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.75rem}
+.uf-btn{padding:5px 13px;font-size:12px;font-weight:500;border:1px solid var(--border2);border-radius:20px;cursor:pointer;background:var(--surface);color:var(--text2);transition:all .15s;font-family:'DM Sans',sans-serif}
+.uf-btn:hover{border-color:var(--accent);color:var(--accent)}
+.uf-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.filter-label{font-size:11px;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:.07em;align-self:center;margin-right:2px}
+
+/* FLASHCARD */
+.fc-wrap{perspective:1000px;margin-bottom:1.25rem}
+.fc-inner{position:relative;min-height:270px;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.4,0,.2,1)}
+.fc-inner.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;cursor:pointer}
+.fc-face.back{transform:rotateY(180deg);background:var(--accent-light);border-color:transparent}
+.fc-badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 10px;border-radius:10px;margin-bottom:.5rem;background:var(--surface2);color:var(--text3)}
+.fc-badge.vocab{background:#E8F0FB;color:#3A5FA0}
+.fc-badge.phrasal{background:#EBF5EC;color:#2E6E3A}
+.fc-badge.idiom{background:#F9EDDC;color:#8C5A1A}
+.fc-badge.collocation{background:#F3E8F8;color:#7A3A9A}
+.fc-unit-tag{font-size:11px;color:var(--text3);margin-bottom:.75rem}
+.fc-ipa{font-size:1rem;color:var(--text2);margin-bottom:.3rem;font-style:italic;min-height:1.4rem;letter-spacing:.02em}
+.fc-ipa-loading{font-size:11px;color:var(--text3);font-style:italic}
+.fc-word{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--text);margin-bottom:.4rem;line-height:1.2}
+.fc-hint{font-size:12px;color:var(--text3);margin-top:1rem}
+.fc-vi-label{font-size:11px;color:var(--accent);font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}
+.fc-vi{font-size:1rem;color:var(--text);line-height:1.6;max-width:90%}
+.fc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:.75rem}
+.fc-nav{display:flex;align-items:center;gap:10px}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border2);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text2);transition:all .15s;font-family:'DM Sans',sans-serif}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+.fc-counter{font-size:13px;color:var(--text2);min-width:70px;text-align:center}
+.know-wrap{display:none;justify-content:center;gap:10px;margin-top:.75rem}
+.know-btn{padding:8px 22px;font-size:13px;font-weight:500;border-radius:20px;cursor:pointer;border:1px solid;transition:all .15s;font-family:'DM Sans',sans-serif}
+.know-btn.yes{border-color:var(--green);color:var(--green);background:var(--green-light)}
+.know-btn.yes:hover{background:var(--green);color:#fff}
+.know-btn.no{border-color:var(--red);color:var(--red);background:var(--red-light)}
+.know-btn.no:hover{background:var(--red);color:#fff}
+
+/* QUIZ */
+.quiz-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;text-align:center;margin-bottom:1.25rem}
+.quiz-prompt{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;font-weight:500}
+.quiz-word{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--text);margin-bottom:.2rem;line-height:1.2}
+.quiz-meta{font-size:12px;color:var(--text2);margin-top:.25rem}
+.quiz-opts{display:flex;flex-direction:column;gap:9px;margin-bottom:1rem}
+.opt{padding:12px 16px;font-size:14px;border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;background:var(--surface);color:var(--text);text-align:left;transition:all .18s;font-family:'DM Sans',sans-serif;line-height:1.4}
+.opt:hover:not(:disabled){border-color:var(--accent);background:var(--accent-light)}
+.opt:disabled{cursor:default}
+.opt.correct{border-color:var(--green);background:var(--green-light);color:var(--green)}
+.opt.wrong{border-color:var(--red);background:var(--red-light);color:var(--red)}
+.quiz-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.score-pill{font-size:13px;color:var(--text2);background:var(--surface2);padding:6px 14px;border-radius:20px}
+.next-btn{padding:9px 22px;font-size:13px;font-weight:500;border:1px solid var(--border2);border-radius:20px;cursor:pointer;background:var(--surface);color:var(--text);transition:all .15s;font-family:'DM Sans',sans-serif;display:none}
+.next-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* BROWSE */
+.search-wrap{position:relative;margin-bottom:1rem}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.4}
+.search-box{width:100%;padding:10px 14px 10px 38px;font-size:14px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s}
+.search-box:focus{border-color:var(--accent)}
+.grp-label{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:.9rem 0 .35rem;border-bottom:1px solid var(--border);margin-bottom:.4rem}
+.word-row{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;transition:background .13s;border-left:3px solid transparent}
+.word-row:hover{background:var(--surface2)}
+.word-row.known{border-left-color:var(--green)}
+.word-row.unknown{border-left-color:var(--red)}
+.wr-cat{font-size:10px;font-weight:500;padding:2px 7px;border-radius:8px;flex-shrink:0;margin-top:2px}
+.wr-cat.vocab{background:#E8F0FB;color:#3A5FA0}
+.wr-cat.phrasal{background:#EBF5EC;color:#2E6E3A}
+.wr-cat.idiom{background:#F9EDDC;color:#8C5A1A}
+.wr-cat.collocation{background:#F3E8F8;color:#7A3A9A}
+.wr-type{font-size:11px;color:var(--text3);width:36px;flex-shrink:0;margin-top:1px}
+.wr-en{font-size:14px;font-weight:500;color:var(--text);flex:1;line-height:1.4}
+.wr-vi{font-size:13px;color:var(--text2);flex:2;display:none;line-height:1.5;padding-top:2px}
+.wr-vi.show{display:block}
+.wr-st{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--surface2);color:var(--text3);flex-shrink:0;margin-top:2px}
+.wr-st.known{background:var(--green-light);color:var(--green)}
+.wr-st.unknown{background:var(--red-light);color:var(--red)}
+
+/* PROGRESS */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;text-align:center}
+.stat-n{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--text)}
+.stat-n.green{color:var(--green)}.stat-n.red{color:var(--red)}
+.stat-lbl{font-size:12px;color:var(--text2);margin-top:.2rem}
+.prog-section{margin-bottom:.9rem}
+.prog-row{display:flex;justify-content:space-between;font-size:13px;color:var(--text2);margin-bottom:.3rem}
+.prog-bar{height:6px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.prog-fill.green{background:var(--green)}
+.reset-btn{margin-top:1.5rem;padding:9px 20px;font-size:13px;border:1px solid var(--border2);border-radius:20px;cursor:pointer;background:none;color:var(--text2);font-family:'DM Sans',sans-serif;transition:all .15s}
+.reset-btn:hover{border-color:var(--red);color:var(--red)}
+.speak-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;font-size:12px;font-weight:500;border:1px solid var(--border2);border-radius:20px;cursor:pointer;background:var(--surface);color:var(--text2);transition:all .15s;font-family:'DM Sans',sans-serif;margin-top:8px}
+.speak-btn:hover{border-color:var(--accent);color:var(--accent)}
+.speak-btn.speaking{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.speak-btn svg{width:13px;height:13px;flex-shrink:0}
+.wr-speak{background:none;border:none;cursor:pointer;color:var(--text3);padding:2px 4px;border-radius:4px;transition:color .15s;display:inline-flex;align-items:center}
+.wr-speak:hover{color:var(--accent)}
+/* CONTEXT TAB */
+.ctx-word-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1rem;display:flex;align-items:center;gap:14px}
+.ctx-word{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--text);flex:1}
+.ctx-meta{font-size:12px;color:var(--text3);margin-top:2px}
+.ctx-vi{font-size:13px;color:var(--text2);margin-top:3px}
+.ctx-nav{display:flex;gap:8px;align-items:center}
+.ctx-ctr{font-size:12px;color:var(--text3);text-align:center;min-width:54px}
+.ctx-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1rem}
+.ctx-section-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.6rem}
+.ctx-body{font-size:14px;color:var(--text);line-height:1.8}
+.ctx-body .highlight{background:var(--accent-light);color:var(--accent);padding:1px 5px;border-radius:4px;font-weight:500}
+.ctx-dialogue{display:flex;flex-direction:column;gap:10px}
+.ctx-bubble{display:flex;gap:10px;align-items:flex-start}
+.ctx-bubble.b{flex-direction:row-reverse}
+.ctx-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;background:var(--surface2);color:var(--text2)}
+.ctx-bubble.a .ctx-avatar{background:#E8F0FB;color:#3A5FA0}
+.ctx-bubble.b .ctx-avatar{background:#EBF5EC;color:#2E6E3A}
+.ctx-msg{font-size:13px;line-height:1.6;color:var(--text);background:var(--surface2);padding:9px 13px;border-radius:var(--radius-sm);max-width:85%}
+.ctx-bubble.a .ctx-msg{border-radius:4px var(--radius-sm) var(--radius-sm) var(--radius-sm)}
+.ctx-bubble.b .ctx-msg{border-radius:var(--radius-sm) 4px var(--radius-sm) var(--radius-sm)}
+.ctx-q-label{font-size:13px;font-weight:500;color:var(--text);margin-bottom:.75rem;line-height:1.5}
+.ctx-input{width:100%;padding:10px 14px;font-size:14px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s;margin-bottom:.75rem}
+.ctx-input:focus{border-color:var(--accent)}
+.ctx-input.correct{border-color:var(--green);background:var(--green-light)}
+.ctx-input.wrong{border-color:var(--red);background:var(--red-light)}
+.ctx-submit{padding:9px 22px;font-size:13px;font-weight:500;border:1px solid var(--border2);border-radius:20px;cursor:pointer;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:all .15s}
+.ctx-submit:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.ctx-feedback{font-size:13px;margin-top:.5rem;padding:8px 12px;border-radius:var(--radius-sm);display:none}
+.ctx-feedback.show{display:block}
+.ctx-feedback.correct{background:var(--green-light);color:var(--green)}
+.ctx-feedback.wrong{background:var(--red-light);color:var(--red)}
+.ctx-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:.75rem}
+.ctx-opt{padding:10px 14px;font-size:13px;border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;background:var(--surface);color:var(--text);text-align:left;transition:all .15s;font-family:'DM Sans',sans-serif}
+.ctx-opt:hover:not(:disabled){border-color:var(--accent);background:var(--accent-light)}
+.ctx-opt:disabled{cursor:default}
+.ctx-opt.correct{border-color:var(--green);background:var(--green-light);color:var(--green)}
+.ctx-opt.wrong{border-color:var(--red);background:var(--red-light);color:var(--red)}
+.ctx-next{padding:10px 24px;font-size:13px;font-weight:500;border:1px solid var(--border2);border-radius:20px;cursor:pointer;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:all .15s;display:none;margin-top:.5rem}
+.ctx-next:hover{background:var(--green);border-color:var(--green);color:#fff}
+.ctx-loading{text-align:center;padding:3rem 1rem}
+.ctx-spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ctx-err{background:var(--red-light);color:var(--red);padding:1rem;border-radius:var(--radius-sm);font-size:13px;text-align:center}
+.ctx-score{font-size:13px;color:var(--text2);background:var(--surface2);padding:5px 12px;border-radius:20px;display:inline-block;margin-bottom:1rem}
+/* FC TYPING BOX */
+.fc-type-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1rem;display:none}
+.fc-type-wrap.show{display:block}
+.fc-type-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:.6rem}
+.fc-type-row{display:flex;gap:8px;align-items:center}
+.fc-type-input{flex:1;padding:9px 13px;font-size:14px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s}
+.fc-type-input:focus{border-color:var(--accent)}
+.fc-type-input.correct{border-color:var(--green);background:var(--green-light);color:var(--green)}
+.fc-type-input.wrong{border-color:var(--red);background:var(--red-light);color:var(--red)}
+.fc-type-check{padding:9px 16px;font-size:13px;font-weight:500;border:1px solid var(--border2);border-radius:var(--radius-sm);cursor:pointer;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap}
+.fc-type-check:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.fc-type-feedback{font-size:13px;margin-top:.5rem;padding:7px 11px;border-radius:var(--radius-sm);display:none;line-height:1.5}
+.fc-type-feedback.show{display:block}
+.fc-type-feedback.correct{background:var(--green-light);color:var(--green)}
+.fc-type-feedback.wrong{background:var(--red-light);color:var(--red)}
+</style>
+</head>
+<body>
+<div class="shell">
+<header>
+  <h1>Vocab Study<span class="dot"></span></h1>
+  <p>Units 2 · 4 · 6 · 8 · 10 · 12 · 14 &nbsp;·&nbsp; 400+ entries including phrasal verbs, idioms & collocations</p>
+</header>
+
+<div class="tabs" style="grid-template-columns:repeat(5,1fr)">
+  <button class="tab active" onclick="switchTab('flashcard',this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('quiz',this)">Quiz</button>
+  <button class="tab" onclick="switchTab('context',this)">Context</button>
+  <button class="tab" onclick="switchTab('browse',this)">Browse</button>
+  <button class="tab" onclick="switchTab('progress',this)">Progress</button>
+</div>
+
+<!-- FLASHCARD -->
+<div id="tab-flashcard" class="panel active">
+  <div class="filter-row"><span class="filter-label">Unit:</span><div id="fc-units" style="display:contents"></div></div>
+  <div class="filter-row"><span class="filter-label">Type:</span><div id="fc-cats" style="display:contents"></div></div>
+  <div class="fc-type-wrap" id="fc-type-wrap">
+    <div class="fc-type-label">Type the Vietnamese meaning before flipping</div>
+    <div class="fc-type-row">
+      <input class="fc-type-input" id="fc-type-input" placeholder="Type meaning in Vietnamese…" onkeydown="if(event.key==='Enter')checkFCType()">
+      <button class="fc-type-check" onclick="checkFCType()">Check</button>
+    </div>
+    <div class="fc-type-feedback" id="fc-type-feedback"></div>
+  </div>
+  <div class="fc-wrap">
+    <div class="fc-inner" id="fc-inner">
+      <div class="fc-face front" onclick="flip()">
+        <div class="fc-badge" id="fc-badge"></div>
+        <div class="fc-unit-tag" id="fc-utag"></div>
+        <div class="fc-word" id="fc-word">—</div>
+        <div class="fc-ipa" id="fc-ipa"></div>
+        <button class="speak-btn" id="fc-speak" onclick="event.stopPropagation();speakWord(document.getElementById('fc-word').textContent)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          Listen
+        </button>
+        <div class="fc-hint">tap card to reveal</div>
+      </div>
+      <div class="fc-face back" onclick="flip()">
+        <div class="fc-vi-label">Meaning</div>
+        <div class="fc-vi" id="fc-vi"></div>
+      </div>
+    </div>
+  </div>
+  <div class="know-wrap" id="know-wrap">
+    <button class="know-btn yes" onclick="markKnown(true)">✓ Know it</button>
+    <button class="know-btn no" onclick="markKnown(false)">✗ Still learning</button>
+  </div>
+  <div class="fc-bar">
+    <div class="fc-nav">
+      <button class="icon-btn" onclick="fcMove(-1)">←</button>
+      <span class="fc-counter" id="fc-ctr"></span>
+      <button class="icon-btn" onclick="fcMove(1)">→</button>
+    </div>
+    <button class="icon-btn" onclick="fcShuffle()" title="Shuffle">⇄</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="tab-quiz" class="panel">
+  <div class="filter-row"><span class="filter-label">Unit:</span><div id="q-units" style="display:contents"></div></div>
+  <div class="filter-row"><span class="filter-label">Type:</span><div id="q-cats" style="display:contents"></div></div>
+  <div class="quiz-card">
+    <div class="quiz-prompt">What does this mean?</div>
+    <div class="quiz-word" id="q-word">—</div>
+    <div class="quiz-meta" id="q-meta"></div>
+    <button class="speak-btn" id="q-speak" onclick="speakWord(document.getElementById('q-word').textContent)" style="margin:0 auto">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      Listen
+    </button>
+  </div>
+  <div class="quiz-opts" id="q-opts"></div>
+  <div class="quiz-row">
+    <div class="score-pill" id="q-score">Score: 0 / 0</div>
+    <button class="next-btn" id="q-next" onclick="nextQ()">Next →</button>
+  </div>
+</div>
+
+<!-- CONTEXT -->
+<div id="tab-context" class="panel">
+  <div class="filter-row"><span class="filter-label">Unit:</span><div id="ctx-units" style="display:contents"></div></div>
+  <div class="filter-row"><span class="filter-label">Type:</span><div id="ctx-cats" style="display:contents"></div></div>
+  <div class="ctx-word-card">
+    <div>
+      <div class="ctx-word" id="ctx-word">—</div>
+      <div class="ctx-meta" id="ctx-meta"></div>
+      <div class="ctx-vi" id="ctx-vi"></div>
+    </div>
+    <div class="ctx-nav">
+      <button class="icon-btn" onclick="ctxMove(-1)">←</button>
+      <span class="ctx-ctr" id="ctx-ctr"></span>
+      <button class="icon-btn" onclick="ctxMove(1)">→</button>
+    </div>
+    <button class="speak-btn" onclick="speakWord(document.getElementById('ctx-word').textContent)" style="flex-shrink:0">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      Listen
+    </button>
+  </div>
+  <div id="ctx-content">
+    <div class="ctx-loading"><div class="ctx-spinner"></div><p style="font-size:13px;color:var(--text3)">Generating context…</p></div>
+  </div>
+</div>
+
+<!-- BROWSE -->
+<div id="tab-browse" class="panel">
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input class="search-box" id="search" placeholder="Search words or meanings…" oninput="renderBrowse()">
+  </div>
+  <div class="filter-row"><span class="filter-label">Unit:</span><div id="b-units" style="display:contents"></div></div>
+  <div class="filter-row"><span class="filter-label">Type:</span><div id="b-cats" style="display:contents"></div></div>
+  <div id="browse-list"></div>
+</div>
+
+<!-- PROGRESS -->
+<div id="tab-progress" class="panel">
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-n" id="p-total">0</div><div class="stat-lbl">Total entries</div></div>
+    <div class="stat-card"><div class="stat-n green" id="p-known">0</div><div class="stat-lbl">Known</div></div>
+    <div class="stat-card"><div class="stat-n red" id="p-learn">0</div><div class="stat-lbl">Still learning</div></div>
+  </div>
+  <div class="prog-section">
+    <div class="prog-row"><span>Overall progress</span><span id="p-pct">0%</span></div>
+    <div class="prog-bar"><div class="prog-fill green" id="p-bar" style="width:0%"></div></div>
+  </div>
+  <div id="p-units"></div>
+  <button class="reset-btn" onclick="resetProgress()">Reset all progress</button>
+</div>
+</div>
+
+<script>
+const VOCAB=[
+/* ══════════════════════════════════════════════
+   UNIT 2 – THINKING & LEARNING
+══════════════════════════════════════════════ */
+// Topic Vocab – Thinking
+{w:"Assess",t:"v",c:"vocab",u:"Unit 2",vi:"đánh giá (tình huống, con người, vấn đề) / đánh giá giá cả, giá trị"},
+{w:"Assume",t:"v",c:"vocab",u:"Unit 2",vi:"giả định, không có căn cứ"},
+{w:"Baffle",t:"v",c:"vocab",u:"Unit 2",vi:"gây trở ngại, khiến cái gì đó trở nên khó khăn, khó hiểu"},
+{w:"Biased",t:"adj",c:"vocab",u:"Unit 2",vi:"thiên vị"},
+{w:"Concentrate",t:"v",c:"vocab",u:"Unit 2",vi:"tập trung"},
+{w:"Consider",t:"v",c:"vocab",u:"Unit 2",vi:"cân nhắc trước khi quyết định / coi cái gì đó như là…"},
+{w:"Contemplate",t:"v",c:"vocab",u:"Unit 2",vi:"dự tính / suy tư, ngẫm nghĩ trong một thời gian dài"},
+{w:"Cynical",t:"adj",c:"vocab",u:"Unit 2",vi:"hay hoài nghi"},
+{w:"Deduce",t:"v",c:"vocab",u:"Unit 2",vi:"suy luận"},
+{w:"Deliberate",t:"v",c:"vocab",u:"Unit 2",vi:"suy xét cẩn thận"},
+{w:"Dilemma",t:"n",c:"vocab",u:"Unit 2",vi:"tình trạng khó xử"},
+{w:"Discriminate",t:"v",c:"vocab",u:"Unit 2",vi:"phân biệt đối xử / nhận ra sự khác nhau"},
+{w:"Dubious",t:"adj",c:"vocab",u:"Unit 2",vi:"không thành thực, khó tin / mơ hồ, không chắc chắn"},
+{w:"Estimate",t:"v/n",c:"vocab",u:"Unit 2",vi:"ước tính (giá cả, thiệt hại) / con số ước tính / thông tin giá cho khách hàng"},
+{w:"Faith",t:"n",c:"vocab",u:"Unit 2",vi:"sự tin tưởng tuyệt đối"},
+{w:"Gather",t:"v",c:"vocab",u:"Unit 2",vi:"suy luận từ những thông tin đã có"},
+{w:"Genius",t:"n",c:"vocab",u:"Unit 2",vi:"thiên tài / tài năng thiên phú"},
+{w:"Grasp",t:"v",c:"vocab",u:"Unit 2",vi:"hiểu (= understand)"},
+{w:"Guesswork",t:"n",c:"vocab",u:"Unit 2",vi:"sự phỏng đoán"},
+{w:"Hunch",t:"n",c:"vocab",u:"Unit 2",vi:"linh cảm"},
+{w:"Ideology",t:"n",c:"vocab",u:"Unit 2",vi:"hệ tư tưởng"},
+{w:"Ingenious",t:"adj",c:"vocab",u:"Unit 2",vi:"(kế hoạch, ý tưởng, sáng chế) thông minh, khéo léo"},
+{w:"Inspiration",t:"n",c:"vocab",u:"Unit 2",vi:"cảm hứng"},
+{w:"Intuition",t:"n",c:"vocab",u:"Unit 2",vi:"trực giác"},
+{w:"Justify",t:"v",c:"vocab",u:"Unit 2",vi:"biện hộ"},
+{w:"Naïve",t:"adj",c:"vocab",u:"Unit 2",vi:"ngây thơ, cả tin"},
+{w:"Notion",t:"n",c:"vocab",u:"Unit 2",vi:"quan niệm"},
+{w:"Optimistic",t:"adj",c:"vocab",u:"Unit 2",vi:"lạc quan"},
+{w:"Paradox",t:"n",c:"vocab",u:"Unit 2",vi:"nghịch lý"},
+{w:"Pessimistic",t:"adj",c:"vocab",u:"Unit 2",vi:"bi quan"},
+{w:"Plausible",t:"adj",c:"vocab",u:"Unit 2",vi:"phù hợp, có vẻ hợp lý"},
+{w:"Ponder",t:"v",c:"vocab",u:"Unit 2",vi:"cân nhắc kỹ càng"},
+{w:"Prejudiced",t:"adj",c:"vocab",u:"Unit 2",vi:"có định kiến"},
+{w:"Presume",t:"v",c:"vocab",u:"Unit 2",vi:"giả định"},
+{w:"Query",t:"n/v",c:"vocab",u:"Unit 2",vi:"câu hỏi chất vấn / chất vấn vì nghi ngờ"},
+{w:"Reckon",t:"v",c:"vocab",u:"Unit 2",vi:"tin vào"},
+{w:"Reflect",t:"v",c:"vocab",u:"Unit 2",vi:"suy xét cẩn thận"},
+{w:"Sceptical",t:"adj",c:"vocab",u:"Unit 2",vi:"hoài nghi"},
+{w:"Speculate",t:"v",c:"vocab",u:"Unit 2",vi:"suy nghĩ về nguyên nhân của việc đã xảy ra"},
+{w:"Suppose",t:"v",c:"vocab",u:"Unit 2",vi:"giả sử, cho là"},
+// Topic Vocab – Learning
+{w:"Academic",t:"adj/n",c:"vocab",u:"Unit 2",vi:"liên quan đến giáo dục / thông minh và ham học / trừu tượng, không thực tế / giảng viên đại học"},
+{w:"Conscientious",t:"adj",c:"vocab",u:"Unit 2",vi:"tận tâm"},
+{w:"Cram",t:"v",c:"vocab",u:"Unit 2",vi:"nhồi nhét cho thi cử"},
+{w:"Curriculum",t:"n",c:"vocab",u:"Unit 2",vi:"chương trình giáo dục"},
+{w:"Distance learning",t:"n",c:"vocab",u:"Unit 2",vi:"hệ thống giáo dục từ xa"},
+{w:"Graduate",t:"n/v",c:"vocab",u:"Unit 2",vi:"người có bằng cấp tốt nghiệp / tốt nghiệp"},
+{w:"Ignorant",t:"adj",c:"vocab",u:"Unit 2",vi:"không biết, ngu dốt cái gì (ignorant of sth)"},
+{w:"Inattentive",t:"adj",c:"vocab",u:"Unit 2",vi:"không tập trung"},
+{w:"Intellectual",t:"n/adj",c:"vocab",u:"Unit 2",vi:"người trí thức / liên quan đến trí tuệ"},
+{w:"Intelligent",t:"adj",c:"vocab",u:"Unit 2",vi:"thông minh"},
+{w:"Intensive",t:"adj",c:"vocab",u:"Unit 2",vi:"chuyên sâu"},
+{w:"Knowledgeable",t:"adj",c:"vocab",u:"Unit 2",vi:"hiểu biết nhiều"},
+{w:"Lecture",t:"n/v",c:"vocab",u:"Unit 2",vi:"bài diễn thuyết ở trường đại học / diễn thuyết"},
+{w:"Mock exam",t:"n",c:"vocab",u:"Unit 2",vi:"thi thử"},
+{w:"Plagiarise",t:"v",c:"vocab",u:"Unit 2",vi:"ăn cắp ý tưởng, quay cóp"},
+{w:"Self-study",t:"v",c:"vocab",u:"Unit 2",vi:"tự học"},
+{w:"Seminar",t:"n",c:"vocab",u:"Unit 2",vi:"buổi nghiên cứu chuyên đề"},
+{w:"Tuition",t:"n",c:"vocab",u:"Unit 2",vi:"việc dạy kèm"},
+{w:"Tutorial",t:"n",c:"vocab",u:"Unit 2",vi:"buổi học thêm"},
+// Phrasal Verbs – Unit 2
+{w:"Brush up (on)",t:"phrv",c:"phrasal",u:"Unit 2",vi:"cải thiện kĩ năng"},
+{w:"Come (a)round (to)",t:"phrv",c:"phrasal",u:"Unit 2",vi:"thay đổi ý kiến theo ai đó vì bị thuyết phục"},
+{w:"Come up with",t:"phrv",c:"phrasal",u:"Unit 2",vi:"nghĩ ra (ý tưởng, kế hoạch)"},
+{w:"Face up to",t:"phrv",c:"phrasal",u:"Unit 2",vi:"chấp nhận và đối mặt (thử thách, khó khăn)"},
+{w:"Figure out",t:"phrv",c:"phrasal",u:"Unit 2",vi:"hiểu ra vấn đề"},
+{w:"Hit upon",t:"phrv",c:"phrasal",u:"Unit 2",vi:"đột nhiên nghĩ ra / phát hiện cái gì đó một cách tình cờ"},
+{w:"Make out",t:"phrv",c:"phrasal",u:"Unit 2",vi:"có thể thấy hoặc nghe rõ gì đó / nói rằng"},
+{w:"Mull over",t:"phrv",c:"phrasal",u:"Unit 2",vi:"cân nhắc cẩn thận (= consider carefully)"},
+{w:"Piece together",t:"phrv",c:"phrasal",u:"Unit 2",vi:"suy luận bằng cách chắp các thông tin lại"},
+{w:"Puzzle out",t:"phrv",c:"phrasal",u:"Unit 2",vi:"giải quyết vấn đề bằng cách nghĩ cẩn thận"},
+{w:"Read up (on/about)",t:"phrv",c:"phrasal",u:"Unit 2",vi:"dành thời gian tìm hiểu về cái gì"},
+{w:"Swot up (on)",t:"phrv",c:"phrasal",u:"Unit 2",vi:"học chăm chỉ cho kỳ thi (= study hard for an examination)"},
+{w:"Take in",t:"phrv",c:"phrasal",u:"Unit 2",vi:"hiểu / chấp nhận cái gì đó là đúng / lừa ai tin vào cái gì không đúng"},
+{w:"Think over",t:"phrv",c:"phrasal",u:"Unit 2",vi:"cân nhắc cẩn thận (= consider carefully)"},
+{w:"Think through",t:"phrv",c:"phrasal",u:"Unit 2",vi:"cân nhắc cẩn thận tất cả các khả năng"},
+{w:"Think up",t:"phrv",c:"phrasal",u:"Unit 2",vi:"nghĩ ra (cái cớ, lý do…)"},
+// Idioms – Unit 2
+{w:"Go to your head",t:"idiom",c:"idiom",u:"Unit 2",vi:"khiến ai đó trở nên kiêu ngạo"},
+{w:"Have your wits about you",t:"idiom",c:"idiom",u:"Unit 2",vi:"có thể suy nghĩ và phản ứng nhanh nhạy"},
+{w:"In the dark about",t:"idiom",c:"idiom",u:"Unit 2",vi:"không biết về cái gì đó"},
+{w:"Know what's what",t:"idiom",c:"idiom",u:"Unit 2",vi:"có kinh nghiệm và biết nhiều"},
+{w:"Not have a leg to stand on",t:"idiom",c:"idiom",u:"Unit 2",vi:"không còn lí lẽ để cãi nữa"},
+{w:"Not see the woods for the trees",t:"idiom",c:"idiom",u:"Unit 2",vi:"không hiểu tình huống chung vì quá tập trung vào chi tiết nhỏ"},
+{w:"Put two and two together",t:"idiom",c:"idiom",u:"Unit 2",vi:"chắp vá các thông tin lại để đoán ra sự thật"},
+{w:"Quick/slow on the uptake",t:"idiom",c:"idiom",u:"Unit 2",vi:"nhanh hiểu / chậm hiểu"},
+{w:"Ring a bell",t:"idiom",c:"idiom",u:"Unit 2",vi:"có vẻ quen thuộc nhưng không nhớ rõ"},
+{w:"Round the bend",t:"idiom",c:"idiom",u:"Unit 2",vi:"điên (= crazy) / drive sb round the bend = làm ai đó phát điên"},
+{w:"Split hairs",t:"idiom",c:"idiom",u:"Unit 2",vi:"tranh cãi về những cái nhỏ nhặt"},
+{w:"Take stock (of)",t:"idiom",c:"idiom",u:"Unit 2",vi:"xem xét cẩn thận trước khi quyết định bước tiếp theo"},
+
+/* ══════════════════════════════════════════════
+   UNIT 4 – CHANGE & TECHNOLOGY
+══════════════════════════════════════════════ */
+{w:"Adapt",t:"v",c:"vocab",u:"Unit 4",vi:"thích nghi"},
+{w:"Adjust",t:"v",c:"vocab",u:"Unit 4",vi:"điều chỉnh"},
+{w:"Alternate",t:"v/adj",c:"vocab",u:"Unit 4",vi:"xảy ra lần lượt / luân phiên (alternate Saturdays)"},
+{w:"Alternative",t:"n/adj",c:"vocab",u:"Unit 4",vi:"lựa chọn khác để thay thế / có sẵn để thay thế"},
+{w:"Amend",t:"v",c:"vocab",u:"Unit 4",vi:"sửa đổi văn kiện"},
+{w:"Conservative",t:"adj",c:"vocab",u:"Unit 4",vi:"bảo thủ, không chấp nhận cái mới"},
+{w:"Convert",t:"v/n",c:"vocab",u:"Unit 4",vi:"thay đổi tín ngưỡng, tôn giáo / người thay đổi tín ngưỡng"},
+{w:"Decay",t:"v/n",c:"vocab",u:"Unit 4",vi:"mục nát / tình trạng mục nát"},
+{w:"Deteriorate",t:"v",c:"vocab",u:"Unit 4",vi:"trầm trọng hơn"},
+{w:"Distort",t:"v",c:"vocab",u:"Unit 4",vi:"xuyên tạc sự thật"},
+{w:"Dynamic",t:"adj",c:"vocab",u:"Unit 4",vi:"năng nổ, năng động, phát triển"},
+{w:"Endure",t:"v",c:"vocab",u:"Unit 4",vi:"chịu đựng / kéo dài"},
+{w:"Evolve",t:"v",c:"vocab",u:"Unit 4",vi:"tiến hóa / phát triển"},
+{w:"Influence",t:"v/n",c:"vocab",u:"Unit 4",vi:"có ảnh hưởng / ảnh hưởng"},
+{w:"Innovation",t:"n",c:"vocab",u:"Unit 4",vi:"sáng kiến"},
+{w:"Innovative",t:"adj",c:"vocab",u:"Unit 4",vi:"mới mẻ, sáng kiến cao"},
+{w:"Maintain",t:"v",c:"vocab",u:"Unit 4",vi:"làm cái gì giữ nguyên"},
+{w:"Mature",t:"v/adj",c:"vocab",u:"Unit 4",vi:"trưởng thành"},
+{w:"Modify",t:"v",c:"vocab",u:"Unit 4",vi:"thay đổi để làm dịu đi"},
+{w:"Novel",t:"adj",c:"vocab",u:"Unit 4",vi:"mới mẻ và độc đáo"},
+{w:"Persist",t:"v",c:"vocab",u:"Unit 4",vi:"khăng khăng"},
+{w:"Radical",t:"adj",c:"vocab",u:"Unit 4",vi:"(cải cách) cấp tiến, triệt để"},
+{w:"Refine",t:"v",c:"vocab",u:"Unit 4",vi:"trau chuốt"},
+{w:"Reform",t:"v/n",c:"vocab",u:"Unit 4",vi:"cải cách, chữa thói xấu / sự sửa đổi"},
+{w:"Revolution",t:"n",c:"vocab",u:"Unit 4",vi:"cuộc cách mạng (thay đổi hoàn toàn phương pháp) / lật đổ chế độ"},
+{w:"Shift",t:"v/n",c:"vocab",u:"Unit 4",vi:"(kế hoạch, ý kiến) thay đổi / sự thay đổi"},
+{w:"Status quo",t:"n",c:"vocab",u:"Unit 4",vi:"hiện trạng"},
+{w:"Substitute",t:"v/n",c:"vocab",u:"Unit 4",vi:"thay thế cái gì bằng cái gì / vật thay thế"},
+{w:"Sustain",t:"v",c:"vocab",u:"Unit 4",vi:"duy trì (sự sống)"},
+{w:"Transform",t:"v",c:"vocab",u:"Unit 4",vi:"thay đổi vẻ ngoài"},
+{w:"Trend",t:"n",c:"vocab",u:"Unit 4",vi:"xu hướng"},
+// Technology
+{w:"Breakthrough",t:"n",c:"vocab",u:"Unit 4",vi:"đột phá"},
+{w:"Broadband",t:"n/adj",c:"vocab",u:"Unit 4",vi:"kết nối mạng tốc độ cao / tốc độ cao"},
+{w:"Complex",t:"adj",c:"vocab",u:"Unit 4",vi:"phức tạp"},
+{w:"Consumer electronics",t:"n",c:"vocab",u:"Unit 4",vi:"thiết bị điện tử"},
+{w:"Data",t:"n",c:"vocab",u:"Unit 4",vi:"dữ liệu"},
+{w:"Download",t:"v/n",c:"vocab",u:"Unit 4",vi:"tải xuống / tài liệu được tải xuống"},
+{w:"Network",t:"v/n",c:"vocab",u:"Unit 4",vi:"kết nối máy tính / mạng lưới máy tính"},
+{w:"Offline",t:"adj",c:"vocab",u:"Unit 4",vi:"ngoại tuyến"},
+{w:"Online",t:"adj",c:"vocab",u:"Unit 4",vi:"trực tuyến"},
+{w:"Primitive",t:"adj",c:"vocab",u:"Unit 4",vi:"nguyên thủy, sơ khai"},
+{w:"Programmer",t:"n",c:"vocab",u:"Unit 4",vi:"lập trình viên"},
+{w:"Upload",t:"v",c:"vocab",u:"Unit 4",vi:"tải lên"},
+// Phrasal Verbs – Unit 4
+{w:"Back up",t:"phrv",c:"phrasal",u:"Unit 4",vi:"sao lưu dữ liệu / ủng hộ ai đó bằng cách đồng ý"},
+{w:"Change around",t:"phrv",c:"phrasal",u:"Unit 4",vi:"di chuyển đồ đạc"},
+{w:"Change into",t:"phrv",c:"phrasal",u:"Unit 4",vi:"biến thành cái khác / thay quần áo"},
+{w:"Change out of",t:"phrv",c:"phrasal",u:"Unit 4",vi:"thay quần áo (cởi ra)"},
+{w:"Do away with",t:"phrv",c:"phrasal",u:"Unit 4",vi:"bãi bỏ, loại bỏ (= get rid of)"},
+{w:"Do up",t:"phrv",c:"phrasal",u:"Unit 4",vi:"sửa sang, trang hoàng / cài cúc quần áo"},
+{w:"Fade away",t:"phrv",c:"phrasal",u:"Unit 4",vi:"từ từ biến mất"},
+{w:"Key in",t:"phrv",c:"phrasal",u:"Unit 4",vi:"nhập thông tin vào máy tính"},
+{w:"Make into",t:"phrv",c:"phrasal",u:"Unit 4",vi:"thay đổi cái này thành cái khác"},
+{w:"Mix up",t:"phrv",c:"phrasal",u:"Unit 4",vi:"trộn lẫn / nhầm lẫn người này với người khác"},
+{w:"Switch on/off",t:"phrv",c:"phrasal",u:"Unit 4",vi:"bật / tắt một loại máy móc, đèn…"},
+{w:"Take apart",t:"phrv",c:"phrasal",u:"Unit 4",vi:"tách nhỏ ra"},
+{w:"Test out",t:"phrv",c:"phrasal",u:"Unit 4",vi:"thử nghiệm một loại máy hoặc sản phẩm"},
+{w:"Turn into",t:"phrv",c:"phrasal",u:"Unit 4",vi:"phát triển thành cái khác / làm cái gì phát triển thành cái khác"},
+{w:"Use up",t:"phrv",c:"phrasal",u:"Unit 4",vi:"dùng hết"},
+{w:"Wear out",t:"phrv",c:"phrasal",u:"Unit 4",vi:"dùng đến khi hỏng"},
+// Idioms – Unit 4
+{w:"A leopard can't change its spots",t:"idiom",c:"idiom",u:"Unit 4",vi:"giang sơn dễ đổi, bản tính khó dời"},
+{w:"All mod cons",t:"idiom",c:"idiom",u:"Unit 4",vi:"thiết bị hiện đại cải thiện cuộc sống (all modern conveniences)"},
+{w:"Break the mould",t:"idiom",c:"idiom",u:"Unit 4",vi:"phá vỡ khuôn phép, làm gì hoàn toàn mới lạ"},
+{w:"Change your tune",t:"idiom",c:"idiom",u:"Unit 4",vi:"thay đổi ý kiến, thái độ về một vấn đề"},
+{w:"Have a change of heart",t:"idiom",c:"idiom",u:"Unit 4",vi:"thay đổi ý định ban đầu"},
+{w:"Know sth inside out",t:"idiom",c:"idiom",u:"Unit 4",vi:"biết rõ cái gì đó từ trong ra ngoài"},
+{w:"Reinvent the wheel",t:"idiom",c:"idiom",u:"Unit 4",vi:"phí thời gian làm cái người khác đã làm rồi"},
+{w:"Stick to your guns",t:"idiom",c:"idiom",u:"Unit 4",vi:"giữ vững lập trường"},
+{w:"The tools of the trade",t:"idiom",c:"idiom",u:"Unit 4",vi:"dụng cụ cần thiết để làm việc"},
+{w:"Turn over a new leaf",t:"idiom",c:"idiom",u:"Unit 4",vi:"hoàn lương, bắt đầu lại tốt hơn"},
+
+/* ══════════════════════════════════════════════
+   UNIT 6 – TIME & WORK
+══════════════════════════════════════════════ */
+{w:"Abrupt",t:"adj",c:"vocab",u:"Unit 6",vi:"đột ngột, bất ngờ"},
+{w:"Anachronism",t:"n",c:"vocab",u:"Unit 6",vi:"cái gì đó lỗi thời"},
+{w:"Annual",t:"adj",c:"vocab",u:"Unit 6",vi:"hằng năm"},
+{w:"Antique",t:"adj/n",c:"vocab",u:"Unit 6",vi:"cổ kính / đồ cổ giá trị"},
+{w:"Century",t:"n",c:"vocab",u:"Unit 6",vi:"thế kỷ"},
+{w:"Chronological",t:"adj",c:"vocab",u:"Unit 6",vi:"theo thứ tự thời gian"},
+{w:"Contemporary",t:"n/adj",c:"vocab",u:"Unit 6",vi:"người sống cùng thời đại / đương thời / hiện đại"},
+{w:"Decade",t:"n",c:"vocab",u:"Unit 6",vi:"thập kỷ"},
+{w:"Duration",t:"n",c:"vocab",u:"Unit 6",vi:"thời lượng (phim…)"},
+{w:"Elapse",t:"v",c:"vocab",u:"Unit 6",vi:"(thời gian) trôi"},
+{w:"Era",t:"n",c:"vocab",u:"Unit 6",vi:"kỷ nguyên"},
+{w:"Eternal",t:"adj",c:"vocab",u:"Unit 6",vi:"vĩnh viễn (= permanently)"},
+{w:"Expire",t:"v",c:"vocab",u:"Unit 6",vi:"hết hạn"},
+{w:"Frequency",t:"n",c:"vocab",u:"Unit 6",vi:"tần suất"},
+{w:"Instantaneous",t:"adj",c:"vocab",u:"Unit 6",vi:"tức thì (= immediate)"},
+{w:"Interim",t:"n/adj",c:"vocab",u:"Unit 6",vi:"khoảng thời gian tạm thời / tạm thời"},
+{w:"Interval",t:"n",c:"vocab",u:"Unit 6",vi:"khoảng nghỉ"},
+{w:"Lapse",t:"v/n",c:"vocab",u:"Unit 6",vi:"nghỉ trong thời gian ngắn / (quyền lợi) mất hiệu lực / sự lầm lẫn / khoảng thời gian"},
+{w:"Lifetime",t:"n",c:"vocab",u:"Unit 6",vi:"cả cuộc đời"},
+{w:"Long-standing",t:"adj",c:"vocab",u:"Unit 6",vi:"đã tồn tại từ lâu"},
+{w:"Millennium",t:"n",c:"vocab",u:"Unit 6",vi:"thiên niên kỷ"},
+{w:"Obsolete",t:"adj",c:"vocab",u:"Unit 6",vi:"lỗi thời"},
+{w:"Overdue",t:"adj",c:"vocab",u:"Unit 6",vi:"quá chậm, quá hạn"},
+{w:"Period",t:"n",c:"vocab",u:"Unit 6",vi:"khoảng thời gian"},
+{w:"Permanent",t:"adj",c:"vocab",u:"Unit 6",vi:"vĩnh viễn"},
+{w:"Phase",t:"n",c:"vocab",u:"Unit 6",vi:"giai đoạn"},
+{w:"Postpone",t:"v",c:"vocab",u:"Unit 6",vi:"hoãn lại"},
+{w:"Prior",t:"adj",c:"vocab",u:"Unit 6",vi:"trước"},
+{w:"Prompt",t:"adj",c:"vocab",u:"Unit 6",vi:"tức thì (= immediate)"},
+{w:"Provisional",t:"adj",c:"vocab",u:"Unit 6",vi:"lâm thời, tạm thời"},
+{w:"Punctual",t:"adj",c:"vocab",u:"Unit 6",vi:"đúng hẹn"},
+{w:"Seasonal",t:"adj",c:"vocab",u:"Unit 6",vi:"theo mùa"},
+{w:"Simultaneous",t:"adj",c:"vocab",u:"Unit 6",vi:"cùng một lúc"},
+{w:"Span",t:"v/n",c:"vocab",u:"Unit 6",vi:"kéo dài trong một khoảng thời gian dài / khoảng thời gian"},
+{w:"Spell",t:"n",c:"vocab",u:"Unit 6",vi:"khoảng thời gian ngắn"},
+{w:"Stint",t:"n",c:"vocab",u:"Unit 6",vi:"khoảng thời gian dành làm gì"},
+{w:"Subsequent",t:"adj",c:"vocab",u:"Unit 6",vi:"tiếp theo"},
+{w:"Temporary",t:"adj",c:"vocab",u:"Unit 6",vi:"tạm thời"},
+{w:"Timely",t:"adj",c:"vocab",u:"Unit 6",vi:"đúng lúc"},
+{w:"Vintage",t:"n/adj",c:"vocab",u:"Unit 6",vi:"(rượu) hảo hạng / cổ điển / năm sản xuất"},
+// Work
+{w:"Civil service",t:"n",c:"vocab",u:"Unit 6",vi:"công vụ"},
+{w:"Client",t:"n",c:"vocab",u:"Unit 6",vi:"khách hàng sử dụng dịch vụ"},
+{w:"Colleague",t:"n",c:"vocab",u:"Unit 6",vi:"đồng nghiệp"},
+{w:"Consultant",t:"n",c:"vocab",u:"Unit 6",vi:"người tư vấn"},
+{w:"Effective",t:"adj",c:"vocab",u:"Unit 6",vi:"có hiệu quả"},
+{w:"Efficient",t:"adj",c:"vocab",u:"Unit 6",vi:"năng suất"},
+{w:"Executive",t:"n",c:"vocab",u:"Unit 6",vi:"người điều hành"},
+{w:"Headhunt",t:"v",c:"vocab",u:"Unit 6",vi:"chiêu mộ sang công ty khác"},
+{w:"Leave",t:"n",c:"vocab",u:"Unit 6",vi:"thời gian nghỉ phép"},
+{w:"Multinational",t:"n/adj",c:"vocab",u:"Unit 6",vi:"công ty đa quốc gia / đa quốc gia"},
+{w:"Promotion",t:"n",c:"vocab",u:"Unit 6",vi:"sự thăng tiến / sự quảng bá"},
+{w:"Prospects",t:"n",c:"vocab",u:"Unit 6",vi:"viễn cảnh"},
+{w:"Recruit",t:"v/n",c:"vocab",u:"Unit 6",vi:"chiêu mộ / tân binh"},
+{w:"Redundant",t:"adj",c:"vocab",u:"Unit 6",vi:"dư thừa, phải nghỉ việc"},
+{w:"Sack",t:"v",c:"vocab",u:"Unit 6",vi:"sa thải"},
+{w:"Strike",t:"v/n",c:"vocab",u:"Unit 6",vi:"đình công / cuộc đình công"},
+{w:"Union",t:"n",c:"vocab",u:"Unit 6",vi:"liên đoàn"},
+// Phrasal Verbs – Unit 6
+{w:"Crop up",t:"phrv",c:"phrasal",u:"Unit 6",vi:"xuất hiện đột ngột"},
+{w:"Dive in",t:"phrv",c:"phrasal",u:"Unit 6",vi:"làm gì đó một cách nhiệt tình"},
+{w:"End up V-ing",t:"phrv",c:"phrasal",u:"Unit 6",vi:"kết thúc ở một trạng thái nào đó"},
+{w:"Kick off (with)",t:"phrv",c:"phrasal",u:"Unit 6",vi:"bắt đầu (= begin with)"},
+{w:"Knock off",t:"phrv",c:"phrasal",u:"Unit 6",vi:"ngừng làm việc"},
+{w:"Knuckle down",t:"phrv",c:"phrasal",u:"Unit 6",vi:"bắt tay vào làm việc chăm chỉ"},
+{w:"Lay off",t:"phrv",c:"phrasal",u:"Unit 6",vi:"cho nghỉ việc vì không đủ việc / dừng sử dụng cái gì tạm thời"},
+{w:"Lie ahead",t:"phrv",c:"phrasal",u:"Unit 6",vi:"sắp xảy ra"},
+{w:"Make up",t:"phrv",c:"phrasal",u:"Unit 6",vi:"làm bù thời gian"},
+{w:"Press ahead/on (with)",t:"phrv",c:"phrasal",u:"Unit 6",vi:"tiếp tục làm dù khó khăn"},
+{w:"Set out",t:"phrv",c:"phrasal",u:"Unit 6",vi:"quyết tâm làm gì"},
+{w:"Snow under",t:"phrv",c:"phrasal",u:"Unit 6",vi:"ngập trong công việc (be snowed under)"},
+{w:"Take on",t:"phrv",c:"phrasal",u:"Unit 6",vi:"tuyển dụng công nhân / nhận công việc, trách nhiệm"},
+{w:"Tide over",t:"phrv",c:"phrasal",u:"Unit 6",vi:"giúp ai đó về tài chính để vượt qua khó khăn"},
+{w:"While away",t:"phrv",c:"phrasal",u:"Unit 6",vi:"giết thời gian"},
+{w:"Wind down",t:"phrv",c:"phrasal",u:"Unit 6",vi:"kết thúc từ từ / thư giãn sau mệt mỏi"},
+// Idioms – Unit 6
+{w:"A stitch in time (saves nine)",t:"idiom",c:"idiom",u:"Unit 6",vi:"giải quyết kịp thời sẽ tránh được hậu họa về sau"},
+{w:"All in good time",t:"idiom",c:"idiom",u:"Unit 6",vi:"những điều tốt đẹp rồi sẽ đến, chỉ cần kiên nhẫn"},
+{w:"At the drop of a hat",t:"idiom",c:"idiom",u:"Unit 6",vi:"ngay lập tức (= immediately)"},
+{w:"Before your time",t:"idiom",c:"idiom",u:"Unit 6",vi:"(cái gì đó xảy ra) trước khi bạn sinh ra / chuyển đến"},
+{w:"For good",t:"idiom",c:"idiom",u:"Unit 6",vi:"mãi mãi (= permanently)"},
+{w:"For the time being",t:"idiom",c:"idiom",u:"Unit 6",vi:"tạm thời (= temporarily)"},
+{w:"From time to time",t:"idiom",c:"idiom",u:"Unit 6",vi:"thỉnh thoảng (= sometimes)"},
+{w:"In/for donkey's years",t:"idiom",c:"idiom",u:"Unit 6",vi:"trong một thời gian rất dài"},
+{w:"In the nick of time",t:"idiom",c:"idiom",u:"Unit 6",vi:"vừa kịp lúc, trong gang tấc"},
+{w:"Once in a blue moon",t:"idiom",c:"idiom",u:"Unit 6",vi:"rất hiếm khi (= very rarely)"},
+{w:"On the spur of the moment",t:"idiom",c:"idiom",u:"Unit 6",vi:"đột nhiên, bất ngờ, không có kế hoạch trước"},
+{w:"The other day",t:"idiom",c:"idiom",u:"Unit 6",vi:"gần đây (= recently)"},
+
+/* ══════════════════════════════════════════════
+   UNIT 8 – MOVEMENT & TRANSPORT
+══════════════════════════════════════════════ */
+{w:"Accelerate",t:"v",c:"vocab",u:"Unit 8",vi:"đẩy nhanh tiến độ"},
+{w:"Approach",t:"v/n",c:"vocab",u:"Unit 8",vi:"tiến đến gần / tiếp cận (xin giúp đỡ) / hướng giải quyết"},
+{w:"Ascend",t:"v",c:"vocab",u:"Unit 8",vi:"leo lên (núi, thang)"},
+{w:"Bounce",t:"v/n",c:"vocab",u:"Unit 8",vi:"nảy lên / sự nảy, đàn hồi"},
+{w:"Clamber",t:"v",c:"vocab",u:"Unit 8",vi:"trèo lên một cách khó khăn"},
+{w:"Clench",t:"v",c:"vocab",u:"Unit 8",vi:"nghiến chặt tay, răng vì tức giận"},
+{w:"Clutch",t:"v",c:"vocab",u:"Unit 8",vi:"giữ chặt cái gì đó trong tay (để khỏi mất)"},
+{w:"Crawl",t:"v",c:"vocab",u:"Unit 8",vi:"bò"},
+{w:"Creep",t:"v",c:"vocab",u:"Unit 8",vi:"đi rón rén"},
+{w:"Dash",t:"v",c:"vocab",u:"Unit 8",vi:"chạy tức tốc"},
+{w:"Descend",t:"v",c:"vocab",u:"Unit 8",vi:"xuống (núi, thang)"},
+{w:"Drift",t:"v/n",c:"vocab",u:"Unit 8",vi:"trôi nổi / sự thay đổi từ từ / ý chính ai đó muốn truyền tải"},
+{w:"Emigrate",t:"v",c:"vocab",u:"Unit 8",vi:"di cư"},
+{w:"Float",t:"v",c:"vocab",u:"Unit 8",vi:"nổi trên mặt nước"},
+{w:"Flow",t:"v/n",c:"vocab",u:"Unit 8",vi:"(dòng) chảy theo hướng / dòng chảy"},
+{w:"Fumble",t:"v",c:"vocab",u:"Unit 8",vi:"mò mẫm"},
+{w:"Gesture",t:"v/n",c:"vocab",u:"Unit 8",vi:"làm cử chỉ / cử chỉ"},
+{w:"Glide",t:"v",c:"vocab",u:"Unit 8",vi:"lướt đi nhẹ nhàng"},
+{w:"Grab",t:"v",c:"vocab",u:"Unit 8",vi:"giật lấy"},
+{w:"Grasp",t:"v",c:"vocab",u:"Unit 8",vi:"nâng niu, giữ nhẹ nhàng"},
+{w:"Hop",t:"v/n",c:"vocab",u:"Unit 8",vi:"nhảy lò cò / bước nhảy lò cò"},
+{w:"Immigrant",t:"n",c:"vocab",u:"Unit 8",vi:"người di cư"},
+{w:"Jog",t:"v/n",c:"vocab",u:"Unit 8",vi:"chạy bộ thể dục"},
+{w:"Leap",t:"v/n",c:"vocab",u:"Unit 8",vi:"nhảy qua cái gì / bước nhảy vọt qua"},
+{w:"March",t:"v/n",c:"vocab",u:"Unit 8",vi:"hành quân / cuộc hành quân"},
+{w:"Migrate",t:"v",c:"vocab",u:"Unit 8",vi:"(chim) di trú"},
+{w:"Refugee",t:"n",c:"vocab",u:"Unit 8",vi:"người tị nạn"},
+{w:"Roam",t:"v",c:"vocab",u:"Unit 8",vi:"đi loanh quanh"},
+{w:"Rotate",t:"v",c:"vocab",u:"Unit 8",vi:"xoay quanh một trục"},
+{w:"Route",t:"n",c:"vocab",u:"Unit 8",vi:"tuyến đường"},
+{w:"Sink",t:"v",c:"vocab",u:"Unit 8",vi:"chìm"},
+{w:"Skid",t:"v/n",c:"vocab",u:"Unit 8",vi:"trượt / sự trượt"},
+{w:"Skip",t:"v",c:"vocab",u:"Unit 8",vi:"nhảy chân sáo, tung tăng"},
+{w:"Slide",t:"v/n",c:"vocab",u:"Unit 8",vi:"trượt trên bề mặt / cầu trượt"},
+{w:"Slip",t:"v",c:"vocab",u:"Unit 8",vi:"trượt ngã"},
+{w:"Step",t:"v/n",c:"vocab",u:"Unit 8",vi:"bước đi / bước chân / bước thực hiện trong một quá trình"},
+{w:"Stride",t:"v/n",c:"vocab",u:"Unit 8",vi:"bước đi khoan thai, tự tin / bước sải chân tự tin"},
+{w:"Trip",t:"v",c:"vocab",u:"Unit 8",vi:"vấp ngã"},
+{w:"Velocity",t:"n",c:"vocab",u:"Unit 8",vi:"vận tốc"},
+{w:"Wander",t:"v",c:"vocab",u:"Unit 8",vi:"đi lang thang"},
+{w:"Wave",t:"v/n",c:"vocab",u:"Unit 8",vi:"vẫy (tay) / cái vẫy tay chào"},
+// Transport
+{w:"Airline",t:"n",c:"vocab",u:"Unit 8",vi:"hãng hàng không"},
+{w:"Cargo",t:"n",c:"vocab",u:"Unit 8",vi:"hàng hóa vận chuyển"},
+{w:"Carriage",t:"n",c:"vocab",u:"Unit 8",vi:"khoang tàu"},
+{w:"Charter",t:"v",c:"vocab",u:"Unit 8",vi:"thuê (tàu, xe, máy bay)"},
+{w:"Commute",t:"v",c:"vocab",u:"Unit 8",vi:"di chuyển giữa nhà và nơi làm việc"},
+{w:"Destination",t:"n",c:"vocab",u:"Unit 8",vi:"điểm đến"},
+{w:"Hiker",t:"n",c:"vocab",u:"Unit 8",vi:"người đi bộ đường dài"},
+{w:"Hitchhiker",t:"n",c:"vocab",u:"Unit 8",vi:"người quá giang"},
+{w:"Jet lag",t:"n",c:"vocab",u:"Unit 8",vi:"sự mệt mỏi sau khi đi máy bay qua các khu vực múi giờ khác nhau"},
+{w:"Legroom",t:"n",c:"vocab",u:"Unit 8",vi:"chỗ duỗi chân"},
+{w:"Passerby",t:"n",c:"vocab",u:"Unit 8",vi:"người qua đường"},
+{w:"Pedestrian",t:"n",c:"vocab",u:"Unit 8",vi:"người đi bộ"},
+{w:"Pier",t:"n",c:"vocab",u:"Unit 8",vi:"bến tàu"},
+{w:"Quay",t:"n",c:"vocab",u:"Unit 8",vi:"chỗ tàu cập bến"},
+{w:"Return fare",t:"n",c:"vocab",u:"Unit 8",vi:"phí vé khứ hồi"},
+{w:"Round trip",t:"n",c:"vocab",u:"Unit 8",vi:"chuyến đi khứ hồi"},
+{w:"Steer",t:"v",c:"vocab",u:"Unit 8",vi:"lái (tàu, xe)"},
+{w:"Steward",t:"n",c:"vocab",u:"Unit 8",vi:"tiếp viên"},
+// Phrasal Verbs – Unit 8
+{w:"Cordon off",t:"phrv",c:"phrasal",u:"Unit 8",vi:"bao vây một khu vực"},
+{w:"Creep up on",t:"phrv",c:"phrasal",u:"Unit 8",vi:"bí mật tiến lại gần để gây bất ngờ"},
+{w:"Fall behind",t:"phrv",c:"phrasal",u:"Unit 8",vi:"tụt lại phía sau / thua kém người khác"},
+{w:"Go astray",t:"phrv",c:"phrasal",u:"Unit 8",vi:"đi lạc"},
+{w:"Head off",t:"phrv",c:"phrasal",u:"Unit 8",vi:"chặn đường ai đó / ngăn cái gì xảy ra"},
+{w:"Hold back",t:"phrv",c:"phrasal",u:"Unit 8",vi:"ngăn ai đó đi tiếp"},
+{w:"Move in (with)",t:"phrv",c:"phrasal",u:"Unit 8",vi:"chuyển vào sống ở nơi khác với ai đó"},
+{w:"Move on",t:"phrv",c:"phrasal",u:"Unit 8",vi:"rời khỏi và tiếp tục đến nơi khác / ngừng làm gì và chuyển sang cái khác"},
+{w:"Move out",t:"phrv",c:"phrasal",u:"Unit 8",vi:"rời khỏi nơi đang ở, làm việc"},
+{w:"Move over",t:"phrv",c:"phrasal",u:"Unit 8",vi:"nhường chỗ cho ai đó"},
+{w:"Pull over",t:"phrv",c:"phrasal",u:"Unit 8",vi:"dừng xe bên đường"},
+{w:"Slip away",t:"phrv",c:"phrasal",u:"Unit 8",vi:"bí mật rời đi"},
+{w:"Step aside",t:"phrv",c:"phrasal",u:"Unit 8",vi:"tránh đường / nhường chức cho ai đó"},
+{w:"Stop off",t:"phrv",c:"phrasal",u:"Unit 8",vi:"ghé thăm ai trước khi đi tiếp"},
+{w:"Tip up",t:"phrv",c:"phrasal",u:"Unit 8",vi:"lật ngược lại để đổ cái bên trong ra"},
+{w:"Walk out",t:"phrv",c:"phrasal",u:"Unit 8",vi:"rời cuộc họp/sự kiện trước khi kết thúc / đột ngột rời bỏ mối quan hệ"},
+// Idioms – Unit 8
+{w:"A stone's throw (away/from)",t:"idiom",c:"idiom",u:"Unit 8",vi:"rất gần với"},
+{w:"As the crow flies",t:"idiom",c:"idiom",u:"Unit 8",vi:"theo đường chim bay (đường thẳng từ điểm này đến điểm khác)"},
+{w:"Follow your nose",t:"idiom",c:"idiom",u:"Unit 8",vi:"đi thẳng / làm theo cảm tính"},
+{w:"In the middle of nowhere",t:"idiom",c:"idiom",u:"Unit 8",vi:"nơi vắng vẻ, xa thành phố"},
+{w:"Lose your bearings",t:"idiom",c:"idiom",u:"Unit 8",vi:"lạc đường, mất phương hướng"},
+{w:"Make a beeline for",t:"idiom",c:"idiom",u:"Unit 8",vi:"đi nhanh thẳng đến chỗ ai đó hoặc cái gì đó"},
+{w:"Off the beaten track",t:"idiom",c:"idiom",u:"Unit 8",vi:"ở nơi hẻo lánh, xa người"},
+{w:"Stop dead in your tracks",t:"idiom",c:"idiom",u:"Unit 8",vi:"đột nhiên dừng lại vì ngạc nhiên (đứng hình)"},
+{w:"Take a short cut to",t:"idiom",c:"idiom",u:"Unit 8",vi:"đi lối tắt"},
+{w:"Take the scenic route",t:"idiom",c:"idiom",u:"Unit 8",vi:"đi lối dài hơn để ngắm cảnh đẹp"},
+
+/* ══════════════════════════════════════════════
+   UNIT 10 – COMMUNICATION & MEDIA
+══════════════════════════════════════════════ */
+{w:"Allege",t:"v",c:"vocab",u:"Unit 10",vi:"cáo buộc"},
+{w:"Ambiguous",t:"adj",c:"vocab",u:"Unit 10",vi:"mơ hồ, nhập nhằng, khó hiểu"},
+{w:"Assert",t:"v",c:"vocab",u:"Unit 10",vi:"quả quyết"},
+{w:"Blunt",t:"adj",c:"vocab",u:"Unit 10",vi:"thẳng thắn, không sợ mất lòng"},
+{w:"Boast",t:"v/n",c:"vocab",u:"Unit 10",vi:"khoe khoang / sự khoe khoang"},
+{w:"Clarification",t:"n",c:"vocab",u:"Unit 10",vi:"sự làm sáng tỏ, làm rõ"},
+{w:"Colloquial",t:"adj",c:"vocab",u:"Unit 10",vi:"thông thường, thân mật, không trang trọng"},
+{w:"Comprehend",t:"v",c:"vocab",u:"Unit 10",vi:"hiểu (= understand)"},
+{w:"Confide in",t:"v",c:"vocab",u:"Unit 10",vi:"tâm sự, tin cậy"},
+{w:"Confirm",t:"v",c:"vocab",u:"Unit 10",vi:"xác nhận / khẳng định cái gì là đúng"},
+{w:"Context",t:"n",c:"vocab",u:"Unit 10",vi:"bối cảnh, ngữ cảnh"},
+{w:"Contradict",t:"v",c:"vocab",u:"Unit 10",vi:"nói ngược lại / mâu thuẫn"},
+{w:"Convey",t:"v",c:"vocab",u:"Unit 10",vi:"truyền tải (thông điệp) / gửi gắm (sự biết ơn) tới ai đó"},
+{w:"Declare",t:"v",c:"vocab",u:"Unit 10",vi:"tuyên bố"},
+{w:"Denounce",t:"v",c:"vocab",u:"Unit 10",vi:"chỉ trích công khai"},
+{w:"Disclose",t:"v",c:"vocab",u:"Unit 10",vi:"hé lộ"},
+{w:"Exaggerate",t:"v",c:"vocab",u:"Unit 10",vi:"phóng đại, thổi phồng"},
+{w:"Flatter",t:"v",c:"vocab",u:"Unit 10",vi:"nịnh bợ"},
+{w:"Gist",t:"n",c:"vocab",u:"Unit 10",vi:"ý chính"},
+{w:"Hint",t:"v/n",c:"vocab",u:"Unit 10",vi:"gợi ý / dấu hiệu thể hiện cảm xúc"},
+{w:"Illegible",t:"adj",c:"vocab",u:"Unit 10",vi:"(chữ) không thể đọc được"},
+{w:"Inkling",t:"n",c:"vocab",u:"Unit 10",vi:"một dấu hiệu nhỏ"},
+{w:"Insist",t:"v",c:"vocab",u:"Unit 10",vi:"khăng khăng phải làm gì / khăng khăng cái gì là đúng"},
+{w:"Jargon",t:"n",c:"vocab",u:"Unit 10",vi:"biệt ngữ xã hội"},
+{w:"Literal",t:"adj",c:"vocab",u:"Unit 10",vi:"theo đúng nghĩa đen"},
+{w:"Mumble",t:"v/n",c:"vocab",u:"Unit 10",vi:"lẩm bẩm / lời nói lẩm bẩm"},
+{w:"Murmur",t:"v/n",c:"vocab",u:"Unit 10",vi:"thì thào / tiếng thì thào"},
+{w:"Petition",t:"n",c:"vocab",u:"Unit 10",vi:"đơn kiến nghị"},
+{w:"Placard",t:"n",c:"vocab",u:"Unit 10",vi:"cáo thị để quảng cáo / phê bình / ủng hộ cái gì đó"},
+{w:"Quibble",t:"v",c:"vocab",u:"Unit 10",vi:"lí sự cùn (cãi về vấn đề nhỏ nhặt)"},
+{w:"Rant",t:"v/n",c:"vocab",u:"Unit 10",vi:"phàn nàn vô lí, rỗng tuếch"},
+{w:"Rave",t:"v",c:"vocab",u:"Unit 10",vi:"phát cuồng, nói viết nhiệt tình về ai / nói một cách phẫn nộ"},
+{w:"Scribble",t:"v/n",c:"vocab",u:"Unit 10",vi:"viết nguệch ngoạc / chữ viết nguệch ngoạc"},
+{w:"Slang",t:"n/adj",c:"vocab",u:"Unit 10",vi:"từ lóng / (từ) không trang trọng"},
+{w:"Stumble",t:"v/n",c:"vocab",u:"Unit 10",vi:"vấp khi đang nói / chỗ vấp khi nói"},
+{w:"Stutter",t:"v/n",c:"vocab",u:"Unit 10",vi:"nói lắp (vì lo lắng) / tật nói lắp"},
+{w:"Utter",t:"v",c:"vocab",u:"Unit 10",vi:"nói (= say) / kêu lên"},
+{w:"Vague",t:"adj",c:"vocab",u:"Unit 10",vi:"mơ hồ, không rõ"},
+// Media
+{w:"Anchor",t:"v/n",c:"vocab",u:"Unit 10",vi:"dẫn chương trình TV / người dẫn chương trình TV"},
+{w:"Broadcast",t:"v/n",c:"vocab",u:"Unit 10",vi:"phát sóng, phát thanh / chương trình truyền hình"},
+{w:"Caption",t:"n",c:"vocab",u:"Unit 10",vi:"chú thích (cho bức ảnh)"},
+{w:"Columnist",t:"n",c:"vocab",u:"Unit 10",vi:"người viết bài cho một chuyên mục"},
+{w:"Correspondent",t:"n",c:"vocab",u:"Unit 10",vi:"phóng viên thường trú"},
+{w:"Coverage",t:"n",c:"vocab",u:"Unit 10",vi:"độ bao phủ thông tin / tin tức TV về một vụ việc"},
+{w:"Critic",t:"n",c:"vocab",u:"Unit 10",vi:"nhà phê bình (sách, phim) / người hay chỉ trích"},
+{w:"Footnote",t:"n",c:"vocab",u:"Unit 10",vi:"chú thích ở cuối trang sách"},
+{w:"Ghostwriter",t:"n",c:"vocab",u:"Unit 10",vi:"người viết thuê"},
+{w:"Manifesto",t:"n",c:"vocab",u:"Unit 10",vi:"tuyên ngôn"},
+{w:"Novelist",t:"n",c:"vocab",u:"Unit 10",vi:"tiểu thuyết gia"},
+{w:"Pamphlet",t:"n",c:"vocab",u:"Unit 10",vi:"cuốn sách nhỏ phát miễn phí để cung cấp thông tin"},
+{w:"Reviewer",t:"n",c:"vocab",u:"Unit 10",vi:"nhà phê bình (sách, phim)"},
+{w:"Subtitles",t:"n",c:"vocab",u:"Unit 10",vi:"phụ đề"},
+{w:"Tabloid",t:"n/adj",c:"vocab",u:"Unit 10",vi:"báo khổ nhỏ / liên quan đến báo khổ nhỏ"},
+{w:"Trailer",t:"n",c:"vocab",u:"Unit 10",vi:"đoạn phim giới thiệu tóm tắt"},
+// Phrasal Verbs – Unit 10
+{w:"Blurt out",t:"phrv",c:"phrasal",u:"Unit 10",vi:"nói hớ, lỡ nói ra"},
+{w:"Catch on",t:"phrv",c:"phrasal",u:"Unit 10",vi:"hiểu / trở nên thịnh hành"},
+{w:"Come out",t:"phrv",c:"phrasal",u:"Unit 10",vi:"được phát hành / dễ nhận ra / được tiết lộ / được nghe, hiểu theo một cách"},
+{w:"Come out with",t:"phrv",c:"phrasal",u:"Unit 10",vi:"nói gì đó gây sốc, ngạc nhiên"},
+{w:"Dry up",t:"phrv",c:"phrasal",u:"Unit 10",vi:"ngừng nói vì quên"},
+{w:"Get across",t:"phrv",c:"phrasal",u:"Unit 10",vi:"làm ai đó hiểu"},
+{w:"Get (a)round",t:"phrv",c:"phrasal",u:"Unit 10",vi:"(tin mới) truyền đi khắp nơi"},
+{w:"Get through (to)",t:"phrv",c:"phrasal",u:"Unit 10",vi:"kết nối điện thoại / làm ai đó hiểu điều đang nói"},
+{w:"Let on",t:"phrv",c:"phrasal",u:"Unit 10",vi:"tiết lộ bí mật"},
+{w:"Pass on",t:"phrv",c:"phrasal",u:"Unit 10",vi:"truyền lại (tin nhắn, quà được gửi nhờ)"},
+{w:"Put across/over",t:"phrv",c:"phrasal",u:"Unit 10",vi:"giảng giải một cách dễ hiểu"},
+{w:"Set down",t:"phrv",c:"phrasal",u:"Unit 10",vi:"ghi chú lại / tuyên bố cách cái gì đó nên được thực hiện"},
+{w:"Shout down",t:"phrv",c:"phrasal",u:"Unit 10",vi:"át tiếng người khác"},
+{w:"Speak out",t:"phrv",c:"phrasal",u:"Unit 10",vi:"nói lên ý kiến của mình (chống lại ai đó)"},
+{w:"Talk over",t:"phrv",c:"phrasal",u:"Unit 10",vi:"bàn chuyện gì đó"},
+{w:"Talk round",t:"phrv",c:"phrasal",u:"Unit 10",vi:"thuyết phục được ai đồng ý / thảo luận chung chung"},
+// Idioms – Unit 10
+{w:"Big mouth",t:"idiom",c:"idiom",u:"Unit 10",vi:"to mồm — người hay tiết lộ bí mật"},
+{w:"Come clean (about sth)",t:"idiom",c:"idiom",u:"Unit 10",vi:"nói sự thật"},
+{w:"Get/catch sb's drift",t:"idiom",c:"idiom",u:"Unit 10",vi:"nắm được ý chính"},
+{w:"Get sth off your chest",t:"idiom",c:"idiom",u:"Unit 10",vi:"giải tỏa bằng cách nói ra những trăn trở"},
+{w:"Get the wrong end of the stick",t:"idiom",c:"idiom",u:"Unit 10",vi:"hiểu sai ý hoàn toàn"},
+{w:"Give sb your word",t:"idiom",c:"idiom",u:"Unit 10",vi:"hứa (= promise)"},
+{w:"(Hear sth) on the grapevine",t:"idiom",c:"idiom",u:"Unit 10",vi:"(nghe) người ta đồn đại"},
+{w:"Keep sb posted",t:"idiom",c:"idiom",u:"Unit 10",vi:"thường xuyên cập nhật tin tức cho ai đó"},
+{w:"Keep sth under your hat",t:"idiom",c:"idiom",u:"Unit 10",vi:"giữ bí mật (= keep sth secret)"},
+{w:"Lay/put your cards on the table",t:"idiom",c:"idiom",u:"Unit 10",vi:"lật bài ngửa — nói ra hết kế hoạch"},
+{w:"Speak volumes",t:"idiom",c:"idiom",u:"Unit 10",vi:"biểu lộ ý nghĩ mà không cần dùng lời trực tiếp"},
+{w:"Tell tales",t:"idiom",c:"idiom",u:"Unit 10",vi:"mách lẻo"},
+
+/* ══════════════════════════════════════════════
+   UNIT 12 – CHANCE & NATURE
+══════════════════════════════════════════════ */
+{w:"Approximate",t:"v/adj",c:"vocab",u:"Unit 12",vi:"tính xấp xỉ / gần đúng, xấp xỉ"},
+{w:"Ascribe to",t:"v",c:"vocab",u:"Unit 12",vi:"quy nguyên nhân tại cái gì đó"},
+{w:"Assign",t:"v",c:"vocab",u:"Unit 12",vi:"phân công"},
+{w:"Attribute to",t:"v",c:"vocab",u:"Unit 12",vi:"quy cho, đổ cho"},
+{w:"Coincidence",t:"n",c:"vocab",u:"Unit 12",vi:"sự ngẫu nhiên, trùng hợp"},
+{w:"Curse",t:"v/n",c:"vocab",u:"Unit 12",vi:"nguyền rủa / lời nguyền"},
+{w:"Deliberate",t:"adj",c:"vocab",u:"Unit 12",vi:"cố ý"},
+{w:"Determine",t:"v",c:"vocab",u:"Unit 12",vi:"quả quyết"},
+{w:"Fate",t:"n",c:"vocab",u:"Unit 12",vi:"số phận"},
+{w:"Fluctuate",t:"v",c:"vocab",u:"Unit 12",vi:"dao động"},
+{w:"Foresee",t:"v",c:"vocab",u:"Unit 12",vi:"thấy trước tương lai"},
+{w:"Freak",t:"n/adj",c:"vocab",u:"Unit 12",vi:"thứ quái dị / quái dị và bất ngờ (freak storm)"},
+{w:"Gamble",t:"v",c:"vocab",u:"Unit 12",vi:"đánh bạc ăn tiền"},
+{w:"Haphazard",t:"adj",c:"vocab",u:"Unit 12",vi:"ngẫu nhiên, không có kế hoạch"},
+{w:"Hazard",t:"n",c:"vocab",u:"Unit 12",vi:"mối nguy hiểm"},
+{w:"Inadvertent",t:"adj",c:"vocab",u:"Unit 12",vi:"không cố ý"},
+{w:"Instrumental",t:"adj",c:"vocab",u:"Unit 12",vi:"cần thiết cho việc gì đó, góp phần vào"},
+{w:"Jinxed",t:"adj",c:"vocab",u:"Unit 12",vi:"xui xẻo, xúi quẩy"},
+{w:"Likelihood",t:"n",c:"vocab",u:"Unit 12",vi:"khả năng xảy ra"},
+{w:"Lucky charm",t:"n",c:"vocab",u:"Unit 12",vi:"vật may mắn"},
+{w:"Mishap",t:"n",c:"vocab",u:"Unit 12",vi:"điều không may"},
+{w:"Mutate",t:"v",c:"vocab",u:"Unit 12",vi:"đột biến (gen)"},
+{w:"Odds",t:"n",c:"vocab",u:"Unit 12",vi:"khả năng xảy ra, cơ hội"},
+{w:"Pot luck",t:"n",c:"vocab",u:"Unit 12",vi:"không biết điều gì sẽ đến nhưng hy vọng là điều tốt"},
+{w:"Random",t:"adj",c:"vocab",u:"Unit 12",vi:"ngẫu nhiên"},
+{w:"Spontaneous",t:"adj",c:"vocab",u:"Unit 12",vi:"tự phát"},
+{w:"Startle",t:"v",c:"vocab",u:"Unit 12",vi:"làm giật mình"},
+{w:"Statistics",t:"n",c:"vocab",u:"Unit 12",vi:"số liệu thống kê"},
+{w:"Stray",t:"v/adj/n",c:"vocab",u:"Unit 12",vi:"đi lạc / bị lạc / động vật đi lạc"},
+{w:"Superstition",t:"n",c:"vocab",u:"Unit 12",vi:"sự mê tín"},
+{w:"Superstitious",t:"adj",c:"vocab",u:"Unit 12",vi:"(người) mê tín"},
+{w:"Transpire",t:"v",c:"vocab",u:"Unit 12",vi:"xảy ra (= happen)"},
+{w:"Uncertainty",t:"n",c:"vocab",u:"Unit 12",vi:"sự không chắc chắn, do dự"},
+{w:"Wobble",t:"v",c:"vocab",u:"Unit 12",vi:"lung lay"},
+// Nature
+{w:"Agriculture",t:"n",c:"vocab",u:"Unit 12",vi:"nông nghiệp"},
+{w:"Appreciate",t:"v",c:"vocab",u:"Unit 12",vi:"đánh giá đúng tầm quan trọng / cảm kích, biết ơn"},
+{w:"Catastrophe",t:"n",c:"vocab",u:"Unit 12",vi:"thảm họa"},
+{w:"Crop",t:"n",c:"vocab",u:"Unit 12",vi:"hoa màu, mùa vụ"},
+{w:"Drought",t:"n",c:"vocab",u:"Unit 12",vi:"hạn hán"},
+{w:"Evacuate",t:"v",c:"vocab",u:"Unit 12",vi:"sơ tán"},
+{w:"Exploit",t:"v",c:"vocab",u:"Unit 12",vi:"khai thác (khoáng sản) / khai thác sức lao động"},
+{w:"Famine",t:"n",c:"vocab",u:"Unit 12",vi:"nạn đói"},
+{w:"Flood",t:"n/v",c:"vocab",u:"Unit 12",vi:"lũ lụt / ngập tràn"},
+{w:"Fossil fuels",t:"n",c:"vocab",u:"Unit 12",vi:"nhiên liệu hóa thạch (coal, oil…)"},
+{w:"Global warming",t:"n",c:"vocab",u:"Unit 12",vi:"sự ấm lên toàn cầu"},
+{w:"Greenery",t:"n",c:"vocab",u:"Unit 12",vi:"cây xanh nói chung"},
+{w:"Habitat",t:"n",c:"vocab",u:"Unit 12",vi:"môi trường sống"},
+{w:"Harvest",t:"v/n",c:"vocab",u:"Unit 12",vi:"thu hoạch, gặt hái / vụ thu hoạch"},
+{w:"Hurricane",t:"n",c:"vocab",u:"Unit 12",vi:"bão"},
+{w:"Instinct",t:"n",c:"vocab",u:"Unit 12",vi:"bản năng, bẩm sinh"},
+{w:"Natural disaster",t:"n",c:"vocab",u:"Unit 12",vi:"thảm họa thiên nhiên"},
+{w:"Resource",t:"n",c:"vocab",u:"Unit 12",vi:"tài nguyên"},
+{w:"Scarce",t:"adj",c:"vocab",u:"Unit 12",vi:"khan hiếm"},
+{w:"Species",t:"n",c:"vocab",u:"Unit 12",vi:"loài, chủng sinh vật"},
+// Phrasal Verbs – Unit 12
+{w:"Chance upon",t:"phrv",c:"phrasal",u:"Unit 12",vi:"tìm thấy hoặc nhìn thấy cái gì tình cờ"},
+{w:"Come across",t:"phrv",c:"phrasal",u:"Unit 12",vi:"gặp ai đó hoặc tìm thấy cái gì một cách tình cờ"},
+{w:"Cool down",t:"phrv",c:"phrasal",u:"Unit 12",vi:"làm mát"},
+{w:"Cut back (on)",t:"phrv",c:"phrasal",u:"Unit 12",vi:"cắt giảm (chi tiêu…)"},
+{w:"Die out",t:"phrv",c:"phrasal",u:"Unit 12",vi:"yếu dần đi rồi biến mất"},
+{w:"Dig up",t:"phrv",c:"phrasal",u:"Unit 12",vi:"đào lên / đào lỗ / tìm thông tin"},
+{w:"Dry up",t:"phrv",c:"phrasal",u:"Unit 12",vi:"khô lại / cạn kiệt, không còn nữa"},
+{w:"Get through",t:"phrv",c:"phrasal",u:"Unit 12",vi:"dùng hết cái gì / vượt qua khó khăn / hoàn thành công việc"},
+{w:"Heat up",t:"phrv",c:"phrasal",u:"Unit 12",vi:"làm nóng lên / nóng lên"},
+{w:"Kill off",t:"phrv",c:"phrasal",u:"Unit 12",vi:"hủy hoại toàn bộ"},
+{w:"Put sth down to",t:"phrv",c:"phrasal",u:"Unit 12",vi:"quy sự việc cho một lí do"},
+{w:"Slip up",t:"phrv",c:"phrasal",u:"Unit 12",vi:"mắc lỗi"},
+{w:"Spring up",t:"phrv",c:"phrasal",u:"Unit 12",vi:"xuất hiện, mọc lên như nấm"},
+{w:"Store up",t:"phrv",c:"phrasal",u:"Unit 12",vi:"dự trữ / làm việc gì đó để lại hậu quả trong tương lai"},
+{w:"Throw out",t:"phrv",c:"phrasal",u:"Unit 12",vi:"vứt đi thứ không cần / đuổi ai ra khỏi nhóm / từ chối kế hoạch"},
+{w:"Throw up",t:"phrv",c:"phrasal",u:"Unit 12",vi:"tạo ra cái mới, đột phá / thổi tung bụi hoặc nước vào không khí"},
+// Idioms – Unit 12
+{w:"An act of God",t:"idiom",c:"idiom",u:"Unit 12",vi:"sự kiện thời tiết xảy ra hoàn toàn do tự nhiên (lũ, sét, động đất)"},
+{w:"Come rain or shine",t:"idiom",c:"idiom",u:"Unit 12",vi:"dù chuyện gì xảy ra (= whatever happens)"},
+{w:"Down on your luck",t:"idiom",c:"idiom",u:"Unit 12",vi:"đang trải qua khó khăn vì không có tiền"},
+{w:"Draw the short straw",t:"idiom",c:"idiom",u:"Unit 12",vi:"bị chọn làm một công việc không vừa lòng"},
+{w:"Have green fingers",t:"idiom",c:"idiom",u:"Unit 12",vi:"trồng vườn giỏi"},
+{w:"Let nature take its course",t:"idiom",c:"idiom",u:"Unit 12",vi:"để mọi thứ thuận theo tự nhiên"},
+{w:"No rhyme or reason",t:"idiom",c:"idiom",u:"Unit 12",vi:"không có lí do lí trấu gì hết"},
+{w:"Out of the blue",t:"idiom",c:"idiom",u:"Unit 12",vi:"bất ngờ, đột ngột (= unexpectedly, suddenly)"},
+{w:"The luck of the draw",t:"idiom",c:"idiom",u:"Unit 12",vi:"một chuyện hên xui, không thể can thiệp"},
+{w:"Touch wood",t:"idiom",c:"idiom",u:"Unit 12",vi:"trộm vía, chém mồm — dùng để tránh những điều không may"},
+
+/* ══════════════════════════════════════════════
+   UNIT 14 – QUANTITY & MONEY
+══════════════════════════════════════════════ */
+{w:"Abundant",t:"adj",c:"vocab",u:"Unit 14",vi:"dồi dào, phong phú"},
+{w:"Ample",t:"adj",c:"vocab",u:"Unit 14",vi:"đủ hoặc nhiều hơn cần thiết"},
+{w:"Average",t:"n/adj",c:"vocab",u:"Unit 14",vi:"số lượng bình quân / số trung bình cộng / bình thường, không tốt lắm"},
+{w:"Batch",t:"n/v",c:"vocab",u:"Unit 14",vi:"nhóm, lô hàng / gom lại, nhóm lại"},
+{w:"Bulk",t:"n",c:"vocab",u:"Unit 14",vi:"đống, số lượng lớn / phần lớn của cái gì"},
+{w:"Considerable",t:"adj",c:"vocab",u:"Unit 14",vi:"đáng kể, lớn"},
+{w:"Countless",t:"adj",c:"vocab",u:"Unit 14",vi:"nhiều không đếm xuể"},
+{w:"Diminish",t:"v",c:"vocab",u:"Unit 14",vi:"giảm đi / làm giảm đi, cắt bớt"},
+{w:"Dimension",t:"n",c:"vocab",u:"Unit 14",vi:"số đo (dài, rộng, cao) / chiều hướng"},
+{w:"Equation",t:"n",c:"vocab",u:"Unit 14",vi:"phương trình toán học / các mặt của vấn đề"},
+{w:"Expand",t:"v",c:"vocab",u:"Unit 14",vi:"mở rộng ra"},
+{w:"Extent",t:"n",c:"vocab",u:"Unit 14",vi:"mức độ nghiêm trọng / diện tích, kích thước"},
+{w:"Finite",t:"adj",c:"vocab",u:"Unit 14",vi:"có hạn"},
+{w:"Fraction",t:"n",c:"vocab",u:"Unit 14",vi:"một phần nhỏ được trích ra / phân số"},
+{w:"Heap",t:"v/n",c:"vocab",u:"Unit 14",vi:"chất đống / đống, chồng"},
+{w:"Imbalance",t:"n",c:"vocab",u:"Unit 14",vi:"sự mất cân bằng"},
+{w:"Immense",t:"adj",c:"vocab",u:"Unit 14",vi:"(số lượng) khổng lồ, cực kỳ lớn"},
+{w:"Intensity",t:"n",c:"vocab",u:"Unit 14",vi:"cường độ, độ mạnh"},
+{w:"Magnitude",t:"n",c:"vocab",u:"Unit 14",vi:"độ lớn, tầm quan trọng, tầm ảnh hưởng"},
+{w:"Major",t:"adj",c:"vocab",u:"Unit 14",vi:"chủ yếu, quan trọng"},
+{w:"Mass",t:"n",c:"vocab",u:"Unit 14",vi:"một lượng lớn, rất nhiều / khối lượng"},
+{w:"Meagre",t:"adj",c:"vocab",u:"Unit 14",vi:"ít ỏi, không đủ"},
+{w:"Minor",t:"adj",c:"vocab",u:"Unit 14",vi:"nhỏ nhặt, tầm thường"},
+{w:"Minute",t:"adj",c:"vocab",u:"Unit 14",vi:"rất nhỏ"},
+{w:"Multiple",t:"adj/n",c:"vocab",u:"Unit 14",vi:"nhiều, đa dạng / bội số"},
+{w:"Proportion",t:"n",c:"vocab",u:"Unit 14",vi:"tỉ lệ"},
+{w:"Quantify",t:"v",c:"vocab",u:"Unit 14",vi:"đo đếm, định lượng"},
+{w:"Rate",t:"v/n",c:"vocab",u:"Unit 14",vi:"đánh giá / tần suất xảy ra / tốc độ xảy ra"},
+{w:"Ratio",t:"n",c:"vocab",u:"Unit 14",vi:"tỉ lệ"},
+{w:"Ration",t:"v/n",c:"vocab",u:"Unit 14",vi:"kiểm soát, hạn chế phần / khẩu phần có giới hạn"},
+{w:"Shrink",t:"v",c:"vocab",u:"Unit 14",vi:"(quần áo) co lại"},
+{w:"Sufficient",t:"adj",c:"vocab",u:"Unit 14",vi:"đủ"},
+{w:"Sum",t:"n",c:"vocab",u:"Unit 14",vi:"lượng tiền / các phép tính đơn giản"},
+{w:"Uneven",t:"adj",c:"vocab",u:"Unit 14",vi:"không đồng đều (về số lượng, kích thước)"},
+{w:"Vast",t:"adj",c:"vocab",u:"Unit 14",vi:"cực kỳ lớn"},
+{w:"Volume",t:"n",c:"vocab",u:"Unit 14",vi:"lượng cái gì đó / thể tích"},
+{w:"Widespread",t:"adj",c:"vocab",u:"Unit 14",vi:"rộng khắp"},
+// Money
+{w:"Benefit",t:"v/n",c:"vocab",u:"Unit 14",vi:"được lợi / tiền trợ cấp / lợi ích"},
+{w:"Compensation",t:"n",c:"vocab",u:"Unit 14",vi:"tiền bồi thường"},
+{w:"Damages",t:"n",c:"vocab",u:"Unit 14",vi:"phí tổn, tiền bồi thường"},
+{w:"Debt",t:"n",c:"vocab",u:"Unit 14",vi:"món nợ"},
+{w:"Deduct",t:"v",c:"vocab",u:"Unit 14",vi:"trích tiền ra"},
+{w:"Deposit",t:"v/n",c:"vocab",u:"Unit 14",vi:"gửi tiền ngân hàng / tiền đặt cọc / tiền gửi ngân hàng"},
+{w:"Direct debit",t:"n",c:"vocab",u:"Unit 14",vi:"ghi nợ trực tiếp (trừ tiền vào tài khoản)"},
+{w:"Dividend",t:"n",c:"vocab",u:"Unit 14",vi:"phần chia lợi nhuận"},
+{w:"Down payment",t:"n",c:"vocab",u:"Unit 14",vi:"tiền đặt cọc"},
+{w:"Finance",t:"v/n",c:"vocab",u:"Unit 14",vi:"xuất vốn / tài chính / vốn"},
+{w:"Insurance",t:"n",c:"vocab",u:"Unit 14",vi:"bảo hiểm"},
+{w:"Interest",t:"n",c:"vocab",u:"Unit 14",vi:"tiền lãi ngân hàng"},
+{w:"Investment",t:"n",c:"vocab",u:"Unit 14",vi:"tiền đầu tư / sự đầu tư"},
+{w:"Lump sum",t:"n",c:"vocab",u:"Unit 14",vi:"trả gộp một lần thay vì từng đợt"},
+{w:"Mortgage",t:"n",c:"vocab",u:"Unit 14",vi:"sự thế chấp"},
+{w:"Overdraft",t:"n",c:"vocab",u:"Unit 14",vi:"thấu chi (dùng tiền khi không có trong tài khoản)"},
+{w:"Pension",t:"n",c:"vocab",u:"Unit 14",vi:"tiền lương hưu"},
+{w:"Share",t:"n",c:"vocab",u:"Unit 14",vi:"cổ phần"},
+{w:"Speculate",t:"v",c:"vocab",u:"Unit 14",vi:"đầu cơ (để thu lợi)"},
+{w:"Withdraw",t:"v",c:"vocab",u:"Unit 14",vi:"rút tiền trong tài khoản"},
+// Phrasal Verbs – Unit 14
+{w:"Add up to",t:"phrv",c:"phrasal",u:"Unit 14",vi:"tổng cộng là / chồng chất lên thành (một kết quả, hậu quả)"},
+{w:"Break down",t:"phrv",c:"phrasal",u:"Unit 14",vi:"chia thành nhiều phần riêng"},
+{w:"Build up",t:"phrv",c:"phrasal",u:"Unit 14",vi:"tăng lên, làm tăng lên / xây dựng hình tượng / làm ai khỏe hơn"},
+{w:"Buy off",t:"phrv",c:"phrasal",u:"Unit 14",vi:"mua chuộc, hối lộ"},
+{w:"Buy out",t:"phrv",c:"phrasal",u:"Unit 14",vi:"mua cổ phần của ai đó trong công ty"},
+{w:"Buy up",t:"phrv",c:"phrasal",u:"Unit 14",vi:"mua hết tất cả"},
+{w:"Carry over",t:"phrv",c:"phrasal",u:"Unit 14",vi:"kéo dài sang tận thời gian khác"},
+{w:"Clock up",t:"phrv",c:"phrasal",u:"Unit 14",vi:"đạt đến một lượng nhất định"},
+{w:"Club together",t:"phrv",c:"phrasal",u:"Unit 14",vi:"góp tiền, quyên tiền"},
+{w:"Drum up",t:"phrv",c:"phrasal",u:"Unit 14",vi:"tuyên truyền quảng cáo (thu hút sự ủng hộ, mua hàng)"},
+{w:"Mount up",t:"phrv",c:"phrasal",u:"Unit 14",vi:"chồng chất lên"},
+{w:"Pay back",t:"phrv",c:"phrasal",u:"Unit 14",vi:"trả nợ"},
+{w:"Pay out",t:"phrv",c:"phrasal",u:"Unit 14",vi:"chi rất nhiều tiền"},
+{w:"Size up",t:"phrv",c:"phrasal",u:"Unit 14",vi:"đánh giá về tình huống hoặc một người"},
+{w:"Take away",t:"phrv",c:"phrasal",u:"Unit 14",vi:"lấy đi một phần"},
+{w:"Weigh down",t:"phrv",c:"phrasal",u:"Unit 14",vi:"làm ai di chuyển khó khăn / gây rắc rối, làm ai lo lắng"},
+// Idioms – Unit 14
+{w:"A stitch in time (saves nine)",t:"idiom",c:"idiom",u:"Unit 14",vi:"xử lý kịp thời sẽ tránh được hậu họa"},
+{w:"Big on",t:"idiom",c:"idiom",u:"Unit 14",vi:"có hứng thú với cái gì"},
+{w:"Cut/make/reach/strike a deal",t:"idiom",c:"idiom",u:"Unit 14",vi:"đồng thuận khi đàm phán"},
+{w:"For my money",t:"idiom",c:"idiom",u:"Unit 14",vi:"theo ý kiến của tôi (= in my opinion)"},
+{w:"Get/have a good deal on",t:"idiom",c:"idiom",u:"Unit 14",vi:"mua với giá hời"},
+{w:"Go to great/any lengths",t:"idiom",c:"idiom",u:"Unit 14",vi:"làm bất cứ thứ gì để đạt được mục tiêu"},
+{w:"In the depths of",t:"idiom",c:"idiom",u:"Unit 14",vi:"khoảng giữa chừng của một giai đoạn khó khăn"},
+{w:"In the long run",t:"idiom",c:"idiom",u:"Unit 14",vi:"rốt cuộc, sau cùng, về lâu dài"},
+{w:"Made of money",t:"idiom",c:"idiom",u:"Unit 14",vi:"giàu có (= be rich)"},
+{w:"Make it big",t:"idiom",c:"idiom",u:"Unit 14",vi:"trở nên nổi tiếng, thành công"},
+{w:"Out of your depth",t:"idiom",c:"idiom",u:"Unit 14",vi:"không có đủ kinh nghiệm để đối mặt khó khăn"},
+{w:"Pay dearly for",t:"idiom",c:"idiom",u:"Unit 14",vi:"chịu đựng, trả giá đắt cho sai lầm"},
+{w:"Put your money where your mouth is",t:"idiom",c:"idiom",u:"Unit 14",vi:"hành động tốt hơn là chỉ nói suông"},
+];
+
+const UNITS=[...new Set(VOCAB.map(v=>v.u))];
+const CATS=['vocab','phrasal','idiom'];
+const STORAGE_KEY='vocab_v2';
+let known=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
+const save=()=>localStorage.setItem(STORAGE_KEY,JSON.stringify(known));
+
+/* ══ PASTE YOUR GEMINI API KEY BELOW ══ */
+const GEMINI_KEY='AIzaSyBel4gEGxnSHVR-y1LvaZQ9REC76zHDQXg';
+/* ====================================== */
+
+async function gemini(prompt,maxTokens=1000){
+  const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      contents:[{parts:[{text:prompt}]}],
+      generationConfig:{maxOutputTokens:maxTokens,temperature:0.7}
+    })
+  });
+  const data=await res.json();
+  return data?.candidates?.[0]?.content?.parts?.[0]?.text||'';
+}
+
+/* ── SPEECH ── */
+function speakWord(text){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const utt=new SpeechSynthesisUtterance(text);
+  utt.lang='en-GB';utt.rate=0.85;utt.pitch=1;
+  const voices=window.speechSynthesis.getVoices();
+  const pref=voices.find(v=>v.lang.startsWith('en')&&v.name.toLowerCase().includes('female'))
+    ||voices.find(v=>v.lang.startsWith('en-GB'))
+    ||voices.find(v=>v.lang.startsWith('en'));
+  if(pref)utt.voice=pref;
+  const btn=document.querySelector('.speak-btn.speaking');
+  if(btn)btn.classList.remove('speaking');
+  document.querySelectorAll('.speak-btn').forEach(b=>{if(b.querySelector('svg')&&b.textContent.includes('Listen')){}});
+  utt.onstart=()=>{document.querySelectorAll('.speak-btn').forEach(b=>b.classList.remove('speaking'));};
+  utt.onend=()=>{document.querySelectorAll('.speak-btn').forEach(b=>b.classList.remove('speaking'));};
+  window.speechSynthesis.speak(utt);
+}
+window.speechSynthesis&&window.speechSynthesis.getVoices();
+
+/* ── IPA ── */
+const ipaCache={};
+async function fetchIPA(word){
+  if(ipaCache[word])return ipaCache[word];
+  try{
+    const prompt=`Give ONLY the British English IPA transcription for the word or phrase: "${word}". If it is a multi-word phrase (phrasal verb or idiom), give IPA for the whole phrase. Return ONLY the IPA symbols inside forward slashes, nothing else. Example: /ˈkɒn.tem.pleɪt/`;
+    const raw=await gemini(prompt,60);
+    const ipa=raw.trim();
+    ipaCache[word]=ipa;
+    return ipa;
+  }catch(e){return '';}
+}
+
+let fcUnit='All',fcCat='All',fcList=[],fcIdx=0,fcFlipped=false;
+let qUnit='All',qCat='All',qCorrect=0,qTotal=0,qAnswered=false;
+let bUnit='All',bCat='All';
+
+function getList(unit,cat){
+  return VOCAB.filter(v=>(unit==='All'||v.u===unit)&&(cat==='All'||v.c===cat));
+}
+
+function makeBtns(cid,opts,cur,cb){
+  const c=document.getElementById(cid);if(!c)return;c.innerHTML='';
+  opts.forEach(u=>{
+    const b=document.createElement('button');
+    b.className='uf-btn'+(u===cur?' active':'');
+    b.textContent=u==='vocab'?'Topic words':u==='phrasal'?'Phrasal verbs':u==='idiom'?'Idioms':u;
+    b.onclick=()=>cb(u);c.appendChild(b);
+  });
+}
+
+function badgeClass(c){return c==='vocab'?'vocab':c==='phrasal'?'phrasal':c==='idiom'?'idiom':'collocation';}
+function badgeLabel(c){return c==='vocab'?'Topic word':c==='phrasal'?'Phrasal verb':c==='idiom'?'Idiom':'Collocation';}
+
+/* ── FLASHCARD ── */
+function initFC(){
+  makeBtns('fc-units',['All',...UNITS],fcUnit,u=>{fcUnit=u;fcIdx=0;fcFlipped=false;initFC();renderFC();});
+  makeBtns('fc-cats',['All',...CATS],fcCat,u=>{fcCat=u;fcIdx=0;fcFlipped=false;initFC();renderFC();});
+  fcList=getList(fcUnit,fcCat);
+  document.getElementById('fc-type-wrap').classList.add('show');
+  renderFC();
+}
+function renderFC(){
+  if(!fcList.length){document.getElementById('fc-word').textContent='No entries';return;}
+  const w=fcList[fcIdx];
+  const b=document.getElementById('fc-badge');
+  b.textContent=badgeLabel(w.c);b.className='fc-badge '+badgeClass(w.c);
+  document.getElementById('fc-utag').textContent=w.u;
+  document.getElementById('fc-word').textContent=w.w;
+  document.getElementById('fc-vi').textContent=w.vi;
+  document.getElementById('fc-inner').classList.toggle('flipped',fcFlipped);
+  document.getElementById('know-wrap').style.display=fcFlipped?'flex':'none';
+  document.getElementById('fc-ctr').textContent=(fcIdx+1)+' / '+fcList.length;
+  const front=document.querySelector('.fc-face.front');
+  const st=known[w.w];
+  front.style.borderColor=st==='known'?'#3B7A4A':st==='unknown'?'#B84040':'';
+  // typing box — visible on front only, reset on new card
+  const tw=document.getElementById('fc-type-wrap');
+  const ti=document.getElementById('fc-type-input');
+  const tf=document.getElementById('fc-type-feedback');
+  if(fcFlipped){
+    tw.classList.remove('show');
+  } else {
+    tw.classList.add('show');
+    ti.value='';ti.disabled=false;
+    ti.className='fc-type-input';
+    tf.className='fc-type-feedback';tf.textContent='';
+  }
+  // IPA
+  const ipaEl=document.getElementById('fc-ipa');
+  if(ipaCache[w.w]){
+    ipaEl.textContent=ipaCache[w.w];
+  } else {
+    ipaEl.innerHTML='<span class="fc-ipa-loading">loading pronunciation…</span>';
+    fetchIPA(w.w).then(ipa=>{
+      if(document.getElementById('fc-word').textContent===w.w){
+        ipaEl.textContent=ipa;
+      }
+    });
+  }
+}
+function flip(){fcFlipped=!fcFlipped;renderFC();}
+function fcMove(d){fcIdx=(fcIdx+d+fcList.length)%fcList.length;fcFlipped=false;renderFC();}
+function fcShuffle(){fcList.sort(()=>Math.random()-.5);fcIdx=0;fcFlipped=false;renderFC();}
+function markKnown(k){
+  const w=fcList[fcIdx];known[w.w]=k?'known':'unknown';save();fcMove(1);
+}
+function checkFCType(){
+  const ti=document.getElementById('fc-type-input');
+  const tf=document.getElementById('fc-type-feedback');
+  if(!ti||ti.disabled)return;
+  const val=ti.value.trim().toLowerCase();
+  if(!val)return;
+  const w=fcList[fcIdx];
+  const answer=w.vi.toLowerCase();
+  // flexible check — if any key word from their answer appears in the real meaning
+  const userWords=val.split(/[\s,/]+/).filter(x=>x.length>2);
+  const answerWords=answer.split(/[\s,/]+/).filter(x=>x.length>2);
+  const matches=userWords.filter(uw=>answerWords.some(aw=>aw.includes(uw)||uw.includes(aw)));
+  const isClose=matches.length>=Math.max(1,Math.floor(userWords.length*0.4));
+  ti.disabled=true;
+  if(isClose){
+    ti.className='fc-type-input correct';
+    tf.textContent='✓ Good! Full meaning: '+w.vi;
+    tf.className='fc-type-feedback show correct';
+    known[w.w]='known';save();
+  } else {
+    ti.className='fc-type-input wrong';
+    tf.textContent='✗ The meaning is: '+w.vi;
+    tf.className='fc-type-feedback show wrong';
+    known[w.w]='unknown';save();
+  }
+}
+
+/* ── QUIZ ── */
+function initQ(){
+  makeBtns('q-units',['All',...UNITS],qUnit,u=>{qUnit=u;qCorrect=0;qTotal=0;initQ();renderQ();});
+  makeBtns('q-cats',['All',...CATS],qCat,u=>{qCat=u;qCorrect=0;qTotal=0;initQ();renderQ();});
+  renderQ();
+}
+function renderQ(){
+  const list=getList(qUnit,qCat);
+  if(list.length<4){document.getElementById('q-word').textContent='Need 4+ entries';return;}
+  const w=list[Math.floor(Math.random()*list.length)];
+  const pool=VOCAB.filter(v=>v.w!==w.w&&v.c===w.c);
+  const others=(pool.length>=3?pool:VOCAB.filter(v=>v.w!==w.w)).sort(()=>Math.random()-.5).slice(0,3);
+  const opts=[w,...others].sort(()=>Math.random()-.5);
+  document.getElementById('q-word').textContent=w.w;
+  document.getElementById('q-meta').textContent=badgeLabel(w.c)+' · '+w.u;
+  const c=document.getElementById('q-opts');c.innerHTML='';
+  opts.forEach(o=>{
+    const b=document.createElement('button');b.className='opt';b.textContent=o.vi;
+    b.onclick=()=>{
+      if(qAnswered)return;qAnswered=true;qTotal++;
+      c.querySelectorAll('.opt').forEach(x=>x.disabled=true);
+      if(o.w===w.w){b.classList.add('correct');qCorrect++;known[w.w]='known';}
+      else{b.classList.add('wrong');c.querySelectorAll('.opt').forEach(x=>{if(x.textContent===w.vi)x.classList.add('correct');});known[w.w]='unknown';}
+      save();
+      document.getElementById('q-next').style.display='block';
+      document.getElementById('q-score').textContent='Score: '+qCorrect+' / '+qTotal;
+    };c.appendChild(b);
+  });
+  document.getElementById('q-next').style.display='none';qAnswered=false;
+}
+function nextQ(){renderQ();}
+
+/* ── BROWSE ── */
+function initBrowse(){
+  makeBtns('b-units',['All',...UNITS],bUnit,u=>{bUnit=u;initBrowse();renderBrowse();});
+  makeBtns('b-cats',['All',...CATS],bCat,u=>{bCat=u;initBrowse();renderBrowse();});
+}
+function renderBrowse(){
+  const q=(document.getElementById('search').value||'').toLowerCase();
+  let list=getList(bUnit,bCat).filter(v=>!q||v.w.toLowerCase().includes(q)||v.vi.toLowerCase().includes(q));
+  const grps={};
+  list.forEach(v=>{if(!grps[v.u])grps[v.u]=[];grps[v.u].push(v);});
+  const c=document.getElementById('browse-list');c.innerHTML='';
+  Object.keys(grps).forEach(g=>{
+    const lbl=document.createElement('div');lbl.className='grp-label';lbl.textContent=g;c.appendChild(lbl);
+    grps[g].forEach(v=>{
+      const st=known[v.w]||'';
+      const row=document.createElement('div');
+      row.className='word-row '+(st);
+      row.innerHTML=`<span class="wr-cat ${badgeClass(v.c)}">${badgeLabel(v.c)}</span><span class="wr-en">${v.w}</span><button class="wr-speak" onclick="event.stopPropagation();speakWord('${v.w.replace(/'/g,"\\'")}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button><span class="wr-vi">${v.vi}</span><span class="wr-st ${st}">${st||'unseen'}</span>`;
+      row.onclick=()=>row.querySelector('.wr-vi').classList.toggle('show');
+      c.appendChild(row);
+    });
+  });
+  if(!list.length){c.innerHTML='<p style="color:var(--text3);font-size:14px;padding:1rem 0">No entries found.</p>';}
+}
+
+/* ── PROGRESS ── */
+function renderProgress(){
+  const total=VOCAB.length;
+  const k=Object.values(known).filter(v=>v==='known').length;
+  const l=Object.values(known).filter(v=>v==='unknown').length;
+  document.getElementById('p-total').textContent=total;
+  document.getElementById('p-known').textContent=k;
+  document.getElementById('p-learn').textContent=l;
+  const pct=Math.round(k/total*100);
+  document.getElementById('p-pct').textContent=pct+'%';
+  document.getElementById('p-bar').style.width=pct+'%';
+  const uc=document.getElementById('p-units');uc.innerHTML='';
+  UNITS.forEach(u=>{
+    const uW=VOCAB.filter(v=>v.u===u);
+    const uk=uW.filter(v=>known[v.w]==='known').length;
+    const p=Math.round(uk/uW.length*100);
+    uc.innerHTML+=`<div class="prog-section"><div class="prog-row"><span>${u}</span><span>${uk}/${uW.length} (${p}%)</span></div><div class="prog-bar"><div class="prog-fill" style="width:${p}%"></div></div></div>`;
+  });
+}
+function resetProgress(){if(confirm('Reset all progress? This cannot be undone.')){known={};save();renderProgress();renderBrowse();}}
+
+/* ── CONTEXT TAB ── */
+let ctxUnit='All',ctxCat='All',ctxList=[],ctxIdx=0,ctxCache={},ctxScore={correct:0,total:0};
+
+function initCtx(){
+  makeBtns('ctx-units',['All',...UNITS],ctxUnit,u=>{ctxUnit=u;ctxIdx=0;initCtx();renderCtxWord();loadCtx();});
+  makeBtns('ctx-cats',['All',...CATS],ctxCat,u=>{ctxCat=u;ctxIdx=0;initCtx();renderCtxWord();loadCtx();});
+  ctxList=getList(ctxUnit,ctxCat);
+  renderCtxWord();
+}
+
+function renderCtxWord(){
+  if(!ctxList.length)return;
+  const w=ctxList[ctxIdx];
+  document.getElementById('ctx-word').textContent=w.w;
+  document.getElementById('ctx-meta').textContent='('+w.t+') · '+w.u+' · '+badgeLabel(w.c);
+  document.getElementById('ctx-vi').textContent=w.vi;
+  document.getElementById('ctx-ctr').textContent=(ctxIdx+1)+' / '+ctxList.length;
+}
+
+function ctxMove(d){
+  ctxIdx=(ctxIdx+d+ctxList.length)%ctxList.length;
+  renderCtxWord();loadCtx();
+}
+
+async function loadCtx(){
+  if(!ctxList.length)return;
+  const w=ctxList[ctxIdx];
+  const key=w.w+'__'+w.u;
+  const content=document.getElementById('ctx-content');
+  content.innerHTML='<div class="ctx-loading"><div class="ctx-spinner"></div><p style="font-size:13px;color:var(--text3)">Generating context for "'+w.w+'"…</p></div>';
+  if(ctxCache[key]){renderCtxContent(ctxCache[key],w);return;}
+  try{
+    const prompt=`You are an English vocabulary teacher for a Vietnamese student learning advanced English (IELTS level). 
+Generate learning content for the word: "${w.w}" (${w.t}) — meaning in Vietnamese: "${w.vi}"
+
+Return ONLY a valid JSON object with this exact structure, no markdown, no extra text:
+{
+  "paragraph": "A natural paragraph of 3-5 sentences about a realistic everyday situation. Use the word '${w.w}' naturally once, wrap it in **double asterisks**.",
+  "dialogue": [
+    {"speaker":"A","name":"Linh","text":"..."},
+    {"speaker":"B","name":"Tom","text":"..."},
+    {"speaker":"A","name":"Linh","text":"..."},
+    {"speaker":"B","name":"Tom","text":"..."}
+  ],
+  "gapfill": {
+    "sentence": "A sentence with a ___ gap where the answer is '${w.w}'. Make it clear from context.",
+    "answer": "${w.w}"
+  },
+  "mcq": {
+    "question": "Based on the paragraph above, what does '${w.w}' mean?",
+    "options": ["correct meaning in simple English","wrong option 1","wrong option 2","wrong option 3"],
+    "answer": 0
+  }
+}
+Make the paragraph and dialogue feel natural and interesting, suitable for a university student. The dialogue should use the word '${w.w}' at least once, wrapped in **double asterisks**.`;
+
+    const raw=await gemini(prompt,1000);
+    const clean=raw.replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(clean);
+    ctxCache[key]=parsed;
+    renderCtxContent(parsed,w);
+  }catch(e){
+    content.innerHTML='<div class="ctx-err">Could not generate content. Please check your internet connection and try again.<br><br><button class="ctx-submit" onclick="loadCtx()">Try again</button></div>';
+  }
+}
+
+function highlightWord(text){
+  return text.replace(/\*\*(.+?)\*\*/g,'<span class="highlight">$1</span>');
+}
+
+function renderCtxContent(data,w){
+  const content=document.getElementById('ctx-content');
+  const mcqOpts=data.mcq.options.map((o,i)=>({text:o,idx:i})).sort(()=>Math.random()-.5);
+  const correctShuffledIdx=mcqOpts.findIndex(o=>o.idx===data.mcq.answer);
+
+  const dialogueHTML=data.dialogue.map(line=>`
+    <div class="ctx-bubble ${line.speaker.toLowerCase()}">
+      <div class="ctx-avatar">${line.name[0]}</div>
+      <div class="ctx-msg">${highlightWord(line.text)}</div>
+    </div>`).join('');
+
+  content.innerHTML=`
+    <div class="ctx-score">Score this session: <strong id="ctx-score-val">${ctxScore.correct}/${ctxScore.total}</strong></div>
+
+    <div class="ctx-section">
+      <div class="ctx-section-label">📖 Paragraph</div>
+      <div class="ctx-body">${highlightWord(data.paragraph)}</div>
+    </div>
+
+    <div class="ctx-section">
+      <div class="ctx-section-label">💬 Dialogue</div>
+      <div class="ctx-dialogue">${dialogueHTML}</div>
+    </div>
+
+    <div class="ctx-section">
+      <div class="ctx-section-label">✏️ Gap-fill — type the missing word</div>
+      <div class="ctx-q-label">${data.gapfill.sentence}</div>
+      <input class="ctx-input" id="gap-input" placeholder="Type your answer…" onkeydown="if(event.key==='Enter')checkGap()">
+      <div><button class="ctx-submit" onclick="checkGap()">Check answer</button></div>
+      <div class="ctx-feedback" id="gap-feedback"></div>
+    </div>
+
+    <div class="ctx-section">
+      <div class="ctx-section-label">🔍 Multiple choice — from context</div>
+      <div class="ctx-q-label">${data.mcq.question}</div>
+      <div class="ctx-opts" id="mcq-opts">
+        ${mcqOpts.map((o,i)=>`<button class="ctx-opt" onclick="checkMCQ(this,${i===correctShuffledIdx})">${o.text}</button>`).join('')}
+      </div>
+      <div class="ctx-feedback" id="mcq-feedback"></div>
+      <button class="ctx-next" id="ctx-next-btn" onclick="ctxMove(1)">Next word →</button>
+    </div>`;
+
+  document.getElementById('gap-input').dataset.answer=data.gapfill.answer.toLowerCase();
+}
+
+function checkGap(){
+  const input=document.getElementById('gap-input');
+  const fb=document.getElementById('gap-feedback');
+  if(!input||!fb)return;
+  const ans=input.dataset.answer;
+  const val=input.value.trim().toLowerCase();
+  if(!val)return;
+  input.disabled=true;
+  if(val===ans||val===ans.replace(/[()]/g,'')){
+    input.classList.add('correct');
+    fb.textContent='✓ Correct! "'+ans+'" is right.';
+    fb.className='ctx-feedback show correct';
+    ctxScore.correct++;
+  } else {
+    input.classList.add('wrong');
+    fb.textContent='✗ Not quite. The answer is "'+ans+'".';
+    fb.className='ctx-feedback show wrong';
+  }
+  ctxScore.total++;
+  document.getElementById('ctx-score-val').textContent=ctxScore.correct+'/'+ctxScore.total;
+}
+
+function checkMCQ(btn,isCorrect){
+  const opts=document.querySelectorAll('.ctx-opt');
+  const fb=document.getElementById('mcq-feedback');
+  if(!fb||btn.disabled)return;
+  opts.forEach(b=>b.disabled=true);
+  if(isCorrect){
+    btn.classList.add('correct');
+    fb.textContent='✓ Correct!';
+    fb.className='ctx-feedback show correct';
+    ctxScore.correct++;
+  } else {
+    btn.classList.add('wrong');
+    opts.forEach(b=>{if(b!==btn&&b.getAttribute('onclick').includes('true'))b.classList.add('correct');});
+    fb.textContent='✗ Not quite — the highlighted option is correct.';
+    fb.className='ctx-feedback show wrong';
+  }
+  ctxScore.total++;
+  document.getElementById('ctx-score-val').textContent=ctxScore.correct+'/'+ctxScore.total;
+  const nb=document.getElementById('ctx-next-btn');
+  if(nb)nb.style.display='inline-block';
+  known[ctxList[ctxIdx].w]=isCorrect?'known':'unknown';save();
+}
+
+function switchTab(t,el){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+t).classList.add('active');
+  if(t==='browse'){renderBrowse();initBrowse();}
+  if(t==='progress')renderProgress();
+  if(t==='context'){initCtx();loadCtx();}
+}
+
+initFC();initQ();initBrowse();
+</script>
+</body>
+</html>
